@@ -1,3 +1,8 @@
 file(GLOB SOURCES "*.cpp")
 
-add_executable(lib1_test ${SOURCES})
+set(NAME lib1_test)
+set(LIBS liblib1.a)
+
+
+add_executable(${NAME} ${SOURCES})
+target_link_libraries(${NAME} ${LIBS})
