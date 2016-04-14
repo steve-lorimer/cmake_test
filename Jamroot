@@ -21,9 +21,6 @@ using gcc : : $(CCACHE) g++
     <cxxflags>-Wall
 ;
 
-# tell bjam where to find Qt
-using qt5 : $QTDIR ;
-
 # extra flags for the `prod` build variant (extends bjam's default `release` variant)
 variant prod : release 
 : 
