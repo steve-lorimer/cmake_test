@@ -1,0 +1,16 @@
+
+# Qt library
+message (STATUS "Qt5 is used")
+find_package(Qt5Core    REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL  REQUIRED)
+ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
+INCLUDE_DIRECTORIES(${INCLUDE_DIRECTORIES} 
+	  ${QT_INCLUDES}
+	  ${QT_INCLUDE_DIR}
+	  ${QT_QT_INCLUDE_DIR}
+	  ${QT_QTCORE_INCLUDE_DIR}
+	  ${QT_QTGUI_INCLUDE_DIR}
+	  ${QT_QTOPENGL_INCLUDE_DIR}
+	  ${Qt5Widgets_INCLUDE_DIRS}
+	  )
