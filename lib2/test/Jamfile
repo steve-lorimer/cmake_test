@@ -1,0 +1,9 @@
+import testing ;
+
+run
+    [ glob *.cpp ]
+    /proj/lib2//lib2
+: : : <testing.launcher>"valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet"
+      <testing.arg>" --report_level=detailed"
+: lib2-tests
+;

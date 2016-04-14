@@ -1,7 +1,11 @@
+.cproject
+.project
+
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
 
 .build
+bin
 
 *.a

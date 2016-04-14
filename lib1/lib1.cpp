@@ -2,5 +2,5 @@
 
 std::string lib1()
 {
-	return __PRETTY_FUNCTION__;
+	return "lib1";
 }

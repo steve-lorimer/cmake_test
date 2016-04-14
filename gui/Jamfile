@@ -1,0 +1,31 @@
+alias qt
+: : : :
+    <cxxflags>-fPIC
+    <library>/qt5//QtCore/<link>shared
+    <library>/qt5//QtWidgets/<link>shared
+    <library>/qt5//QtGui/<link>shared
+;
+
+constant EXE : gui ;
+
+exe $(EXE)
+:   [ glob *.cpp ]
+	qt
+	/proj/lib1//lib1
+	/proj/lib2//lib2
+;
+
+################
+# install the binary to the local directory
+
+install install-target : $(EXE) : <location>. ;
+
+################
+# install a binary tagged with version information to the local directory
+
+notfile . : @tag-file : install-target : ;
+actions tag-file
+{
+    $(TOP)/scripts/rm_tagged_output.sh $(>) short
+    cp $(>) $(>).$(TAG) 
+}

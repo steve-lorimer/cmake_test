@@ -1,0 +1,7 @@
+lib lib2
+:   [ glob *.cpp ]
+	/proj/lib1//lib1
+;
+
+build-project test ;
+
