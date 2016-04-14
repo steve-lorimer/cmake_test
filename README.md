@@ -1,69 +1,56 @@
-##cmake
+## Requirements
 
-Search for all `.cpp` files in `src` directory, and add to `${SOURCES}`
+- boost-build : for building the project with bjam
+- boost-test  : for unit tests
+- valgrind    : for unit tests
+- qt5         : for gui
+- tcmalloc    : only for `prod` build variant
 
-    file(GLOB SOURCES "src/*.cpp")
+## Existing build system - [boost build](http://www.boost.org/build/)
 
-Create an executable called `app_name` from `${SOURCES}`
+### Features
 
-    add_executable(app_name ${SOURCES})
+#### Verstion information:
 
-Create a static lib called `lib_name` from `${SOURCES}`
+Build process calls a script which generates version information and prints details to stdout upon update
 
-    add_library(lib_name STATIC ${SOURCES})
+From `Jamroot`:
 
-Link a library
+    Echo [ SHELL "$(TOP)/app/version.sh $(TOP)" ] ;
 
-    set(LIBS lib_foo.a)
-    link_directories(../lib_foo/build)
-    target_link_libraries(app_name ${LIBS})
+Result of running `version.sh` is `app/version_details.h`
 
-###Pull in CMakeLists from subdirectories
+#### Tagged binaries:
 
-    add_subdirectory(foo)
+Build process calls a script which tags binaries with version information
 
-###Create a version file
+Version information tagged onto a binary:
 
-    set (FOO_VERSION_MAJOR 1)
-    set (FOO_VERSION_MINOR 0)
+- branch  : branch name binary is built from
+- commits : number of commits in this branch
+- dirty   : whether the branch is clean, or has uncommitted changes, untracked files etc
 
-    configure_file (
-      "${PROJECT_SOURCE_DIR}/version.h.in"
-      "${PROJECT_BINARY_DIR}/version.h"
-      )
+From `Jamroot`:
 
-Now create the `version.h.in` file with the following contents:
+    # creates a variable called $(TAG) which contains current build version information
+    local tag = [ SHELL "$(TOP)/scripts/tag.sh" ] ;
+    constant TAG : $(tag) ;
 
-    #define FOO_VERSION_MAJOR @FOO_VERSION_MAJOR@
-    #define FOO_VERSION_MINOR @FOO_VERSION_MINOR@
+From `app/Jamfile`:
 
-###Configurable options
+    # use $(TAG) defiend in Jamroot to tag the binary, eg: app.<branch>.<num_commits>.dirty
+    cp $(>) $(>).$(TAG) 
 
-    option(USE_FOO "Use feature foo" ON)
+#### Automated tests:
 
-    if (USE_FOO)
-        add_subdirectory(foo)
-        set (EXTRA_LIBS ${EXTRA_LIBS} foo)
-    endif()
+Tests are part of the build process - a failing test results in a failed build
 
-    target_link_libraries(app_name, ${EXTRA_LIBS})
+#### Custom test launchers:
 
-We can also add `#cmakedefine USE_FOO` to `version.h.in` to have a `#define` added if the option is enabled
+Tests can be run through custom launchers, for example, `valgrind`, so we can verify there are no memory leaks
 
-###Generated files
+From 'lib1/test/Jamfile':
 
-Generate `file.h` by running `FooCmd`:
+    <testing.launcher>"valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet"
 
-    add_custom_command (
-      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/file.h
-      COMMAND FooCmd args
-      DEPENDS FooCmd
-      )
-
-If `FooCmd` is created by `cmake`, then we can make the `custom_command` `DEPEND` on it
-
-Add generated `file.h` to a library:
-
-    include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-    add_library(FooLib, ${CMAKE_CURRENT_BINARY_DIR}/file.h)
-
+If `valgrind` exits with an error (`--error-exitcode=1`), the build fails

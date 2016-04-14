@@ -4,35 +4,27 @@ import common ;
 path-constant TOP : . ;
 
 # generate current version information 
-# (done here because jam globbing doesn't pick up generated files on time if done in their respective jamfiles) 
 Echo [ SHELL "$(TOP)/app/version.sh $(TOP)" ] ;
 
 # generate tagging information to be used when installing binaries
 local tag = [ SHELL "$(TOP)/scripts/tag.sh" ] ;
 constant TAG : $(tag) ;
 
+# use ccache if it exists
 local CCACHE = [ common.find-tool ccache ] ;
 
+# add custom flags to gcc
 using gcc : : $(CCACHE) g++
 :
     <cxxflags>-std=c++14
     <cxxflags>-Werror
     <cxxflags>-Wall
-    <cxxflags>-m64
-    <cxxflags>-msse2
-    <cxxflags>-msse4.2
-    <cxxflags>-mfpmath=sse
-    <cxxflags>-funroll-loops
-    <cxxflags>-fdevirtualize
-    <linkflags>-m64
-    <linkflags>-rdynamic
-    <linkflags>-lrt
 ;
 
+# tell bjam where to find Qt
 using qt5 : $QTDIR ;
 
-# build variants
-
+# extra flags for the `prod` build variant (extends bjam's default `release` variant)
 variant prod : release 
 : 
     <cxxflags>-ggdb1 
@@ -43,8 +35,9 @@ variant prod : release
     <find-static-library>tcmalloc_minimal
 ;
 
+# flags for the entire project
 project proj
-  : requirements
+: requirements
     <link>static
     <include>.
     <include>/usr/local/include
@@ -52,8 +45,6 @@ project proj
     <library-path>/usr/local/lib
     <library-path>/usr/lib64
     <library-path>/usr/lib/x86_64-linux-gnu
-    <find-shared-library>pthread
-    <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG    
 ;
 
 use-project /proj/lib1  : lib1 ;
