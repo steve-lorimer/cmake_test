@@ -1,10 +1,10 @@
 ## Requirements
 
-- boost-build : for building the project with bjam
-- boost-test  : for unit tests
-- valgrind    : for unit tests
-- qt5         : for gui
-- tcmalloc    : only for `prod` build variant
+- `boost-build` : for building the project with bjam
+- `boost-test`  : for unit tests
+- `valgrind`    : for unit tests
+- `qt5`         : for gui
+- `tcmalloc`    : only for `prod` build variant
 
 ## Existing build system - [boost build](http://www.boost.org/build/)
 
@@ -26,9 +26,9 @@ Build process calls a script which tags binaries with version information
 
 Version information tagged onto a binary:
 
-- branch  : branch name binary is built from
-- commits : number of commits in this branch
-- dirty   : whether the branch is clean, or has uncommitted changes, untracked files etc
+- `branch`  : branch name binary is built from
+- `commits` : number of commits in this branch
+- `dirty`   : whether the branch is clean, or has uncommitted changes, untracked files etc
 
 From `Jamroot`:
 
@@ -49,7 +49,7 @@ Tests are part of the build process - a failing test results in a failed build
 
 Tests can be run through custom launchers, for example, `valgrind`, so we can verify there are no memory leaks
 
-From 'lib1/test/Jamfile':
+From `lib1/test/Jamfile`:
 
     <testing.launcher>"valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet"
 
