@@ -7,6 +7,6 @@ function(register_test NAME)
 	add_custom_command(TARGET ${NAME} POST_BUILD COMMAND ${NAME})
 
 	# add the test to a custom target (make check) and make it depend on the test executable, so the test will be built if it is outdated
- 	add_custom_target (check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS ${NAME})
+ 	#add_custom_target (check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS ${NAME})
 
 endfunction()

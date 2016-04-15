@@ -38,19 +38,12 @@ endif()
 
 # debug settings
 if ("${CMAKE_BUILD_TYPE}" MATCHES "Debug")
-
     message (STATUS "building debug")
-
-
-	#set_property (DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:_DEBUG> )
-	
 	link_directories (${link_directories} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG}) 
 
 # release settings
 elseif ("${CMAKE_BUILD_TYPE}" MATCHES "Release")
-
     message (STATUS "building release")
-
 	link_directories (${link_directories} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE}) 
 
 # unsupported build variant
