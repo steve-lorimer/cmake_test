@@ -1,7 +1,4 @@
-file(GLOB SOURCES "*.cpp")
+include(boost_test)
 
-set(NAME lib1_test)
-set(LIBS liblib1.a)
-
-add_executable(${NAME} ${SOURCES})
-target_link_libraries(${NAME} ${LIBS})
+file(GLOB src "*.cpp")
+add_boost_test(lib1_test ${src} lib1)

@@ -2,7 +2,6 @@ constant EXE : app ;
 
 exe $(EXE)
 :   [ glob *.cpp ]
-	/proj/lib1//lib1
 	/proj/lib2//lib2
 ;
 
