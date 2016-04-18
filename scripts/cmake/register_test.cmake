@@ -1,12 +1,27 @@
-function(register_test NAME)
+function(register_test test tgt)
  
     # register the test with ctest
-    add_test          (NAME ${NAME} COMMAND $<TARGET_FILE:${NAME}> WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})  
+    add_test          (NAME ${test}          COMMAND                 $<TARGET_FILE:${test}> WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})  
+    # add_test          (NAME ${test}_memcheck COMMAND ${VALGRIND_CMD} $<TARGET_FILE:${test}> WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})  
 
-    # make the test run as part of the build process
-	add_custom_command(TARGET ${NAME} POST_BUILD COMMAND ${NAME})
+    add_custom_command(
+        OUTPUT  ${test}.passed
+        #COMMAND ctest -C $<CONFIGURATION> --output-on-failure
+        COMMAND ${test}
+        COMMAND ${CMAKE_COMMAND} -E touch ${test}.passed
+        DEPENDS ${test}
+        )
 
-	# add the test to a custom target (make check) and make it depend on the test executable, so the test will be built if it is outdated
- 	#add_custom_target (check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS ${NAME})
+    # add_custom_command(
+    #     OUTPUT  ${test}_memcheck.passed
+    #     #COMMAND ctest -C $<CONFIGURATION> --output-on-failure
+    #     COMMAND ${test}_memcheck
+    #     COMMAND ${CMAKE_COMMAND} -E touch ${test}_memcheck.passed
+    #     DEPENDS ${test}
+    #     )
+
+	add_dependencies(${tgt}
+		DEPENDS ${test}.passed
+		)
 
 endfunction()

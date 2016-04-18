@@ -1,0 +1,6 @@
+find_package(Boost) 
+if (NOT Boost_FOUND)
+    message (SEND_ERROR "unable to find boost")
+else()
+    include_directories (${Boost_INCLUDE_DIRS}) 
+endif()	  
