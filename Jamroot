@@ -1,3 +1,19 @@
+# ##### minimal
+# 
+# using gcc ;
+# 
+# project proj
+# : requirements
+#     <link>static
+#     <include>.
+# ;
+# 
+# build-project lib1 ;
+# 
+########################################################################3
+
+##### complete
+
 import notfile ;
 import common ;
 
