@@ -49,7 +49,7 @@ Tests are part of the build process - a failing test results in a failed build
 
 Tests can be run through custom launchers, for example, `valgrind`, so we can verify there are no memory leaks
 
-From `lib1/test/Jamfile`:
+From `foo/test/Jamfile`:
 
     <testing.launcher>"valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet"
 

@@ -1,6 +1,6 @@
-lib lib2
+lib bar
 :   [ glob *.cpp ]
-	/proj/lib1//lib1
+	/proj/foo//foo
 ;
 
 build-project test ;

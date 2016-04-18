@@ -1,11 +1,11 @@
-#include "lib1.h"
+#include "foo.h"
 
-std::string lib1()
+std::string foo()
 {
 	// purposeful memory leak to get valgrind to barf
 	const char* s = new char[5];
 	(void)s;
 
 	return "error";
-	// return "lib1";
+	// return "foo";
 }

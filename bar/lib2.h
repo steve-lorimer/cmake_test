@@ -1,4 +1,4 @@
 #pragma once
 #include <string>
 
-std::string lib1();
+std::string bar();

@@ -2,8 +2,14 @@ import testing ;
 
 run
     [ glob *.cpp ]
-    /proj/lib2//lib2
+    /proj/foo//foo
 : : : <testing.launcher>"valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet"
       <testing.arg>" --report_level=detailed"
-: lib2-tests
+: foo-tests
 ;
+
+
+#unit-test foo-tests
+#:   [ glob *.cpp ]
+#    ..//foo
+#;

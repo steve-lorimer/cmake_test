@@ -1,14 +1,14 @@
 #include <iostream>
 #include "version.h"
-#include "lib1/lib1.h"
-#include "lib2/lib2.h"
+#include "foo/foo.h"
+#include "bar/bar.h"
 
 int main()
 {
     std::cout << app_version() << '\n'
               << '\n'
-              << "lib1: " << lib1() << '\n'
-              << "lib2: " << lib2() << '\n';
+              << "foo: " << foo() << '\n'
+              << "bar: " << bar() << '\n';
 
     return 0;
 }

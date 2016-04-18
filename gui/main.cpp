@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QMessageBox>
-#include "lib2/lib2.h"
+#include "bar/bar.h"
 
 class App
 {
@@ -32,8 +32,8 @@ public:
     {
         QMessageBox(
             QMessageBox::Icon::Information,
-            "lib2 output",
-            QString::fromStdString(lib2()),
+            "bar output",
+            QString::fromStdString(bar()),
             QMessageBox::StandardButton::NoButton,
             window).exec();
     }

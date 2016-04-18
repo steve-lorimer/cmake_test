@@ -8,7 +8,7 @@
 #     <include>.
 # ;
 # 
-# build-project lib1 ;
+# build-project foo ;
 # 
 ########################################################################3
 
@@ -60,10 +60,10 @@ project proj
     <library-path>/usr/lib/x86_64-linux-gnu
 ;
 
-use-project /proj/lib1  : lib1 ;
-use-project /proj/lib2  : lib2 ;
+use-project /proj/foo  : foo ;
+use-project /proj/bar  : bar ;
 
-build-project lib1 ;
-build-project lib2 ;
+build-project foo ;
+build-project bar ;
 build-project app ;
 build-project gui ;

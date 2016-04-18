@@ -48,8 +48,8 @@ endif()
 # C++11 is mendatory
 set (${CXX_STANDARD_REQUIRED} ON)
 
-add_subdirectory (lib1)
-#add_subdirectory (lib2)
+add_subdirectory (foo)
+#add_subdirectory (bar)
 #add_subdirectory (app)
 #add_subdirectory (gui)
 
