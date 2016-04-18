@@ -3,9 +3,11 @@ app/version_details.h
 .cproject
 .project
 
+Makefile
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
+CTestTestfile.cmake
 
 build
 bin

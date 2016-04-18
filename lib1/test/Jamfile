@@ -7,3 +7,9 @@ run
       <testing.arg>" --report_level=detailed"
 : lib1-tests
 ;
+
+
+#unit-test lib1-tests
+#:   [ glob *.cpp ]
+#    ..//lib1
+#;

@@ -5,16 +5,10 @@ if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
-# enable ccache if it exsts
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    message (STATUS "using ccache")
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif(CCACHE_FOUND)
-
 # add our custom cmake modules
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/scripts/cmake")
+include(ccache)
+include(test_utils)
 
 # CMAKE_SOURCE_DIR   refers to the folder where the top-level CMakeLists.txt is defined
 # PROJECT_SOURCE_DIR refers to the folder of the CMakeLists.txt containing the most recent project() command
@@ -22,14 +16,7 @@ include_directories ("${CMAKE_SOURCE_DIR}")
 
 
 # 3rd party dependencies
-###############################################
-# boost
-find_package(Boost) 
-if (NOT Boost_FOUND)
-    message (SEND_ERROR "unable to find boost")
-else()
-    include_directories (${Boost_INCLUDE_DIRS}) 
-endif()	  
+include(require_boost)
 
 # compiler flags
 if (CMAKE_COMPILER_IS_GNUCXX)
@@ -54,27 +41,17 @@ else()
 endif()
 
 # specify where compiled files must go
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
-set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
+# set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/bin)
+# set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
+# set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/lib)
 
 # C++11 is mendatory
 set (${CXX_STANDARD_REQUIRED} ON)
 
-# we have tests!
-enable_testing()
-
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-include(boost_test)
-
-# make tests run through valgrind
-set (CMAKE_MEMORYCHECK_COMMAND, "usr/bin/valgrind")
-set (CMAKE_MEMORYCHECK_COMMAND_OPTIONS, "--trace-children=yes --leak-check=full --track-origins=yes --error-exitcode=1 --quiet")
-
 add_subdirectory (lib1)
-add_subdirectory (lib2)
-add_subdirectory (app)
-add_subdirectory (gui)
+#add_subdirectory (lib2)
+#add_subdirectory (app)
+#add_subdirectory (gui)
 
 
 
