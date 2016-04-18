@@ -1,9 +1,9 @@
 file(GLOB src "*.cpp")
 
-#add_boost_test(foo_test foo ${src} _foo)
+#add_boost_test(foo_test foo ${src} libfoo)
 
 add_executable       (foo_test ${src})
-target_link_libraries(foo_test _foo  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(foo_test libfoo  ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 add_test(
 	NAME    foo_test          
