@@ -6,4 +6,6 @@ bin(
 		version.cpp
 
 	DEPS libbar
+
+	INSTALL
 	)

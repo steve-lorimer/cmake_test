@@ -48,12 +48,16 @@ function(test)
 
     # create test.run module which depends on test.passed
     add_custom_target(${TEST_NAME}.run
+        ALL
         DEPENDS ${TEST_NAME}.passed
         )
 
     # add test.run as a dependency of module, so 'make module' will build and run the tests
     if (TEST_MODULE)
-        add_to_module(${TEST_MODULE} ${TEST_NAME}.run)
+        add_to_module(
+            ${TEST_MODULE} 
+            ${TEST_NAME}.run
+            )
     endif()
 
 endfunction()

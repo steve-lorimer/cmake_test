@@ -1,0 +1,11 @@
+include(ccache)
+include(compile_flags)
+include(default_build)
+include(dependencies)
+
+include(module)
+include(bin)
+include(qt)
+include(qt_bin)
+include(lib)
+include(test)
