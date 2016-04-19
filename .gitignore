@@ -1,4 +1,5 @@
 app/version_details.h
+*.tag
 
 .cproject
 .project

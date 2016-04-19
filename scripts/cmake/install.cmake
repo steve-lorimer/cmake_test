@@ -2,30 +2,59 @@ include(module)
 
 function(install)
     # arguments:
-    # NAME    name
+    # FILE    file
     # MODULE  module
     # DEST    destination
+    # TAG
 
     # parse arguments
-    set(options)
-    set(values  NAME MODULE DEST)
+    set(options TAG)
+    set(values  FILE MODULE DEST)
     cmake_parse_arguments(INSTALL "${options}" "${values}" "${lists}" "${ARGN}")
- 
+
+    set (INSTALL_TARGETS ${INSTALL_DEST})
+
     add_custom_command(
         OUTPUT  ${INSTALL_DEST}
-        COMMAND ${CMAKE_COMMAND} -E copy ${INSTALL_NAME} ${INSTALL_DEST}
-        DEPENDS ${INSTALL_NAME}
+        COMMAND ${CMAKE_COMMAND} -E copy ${INSTALL_FILE} ${INSTALL_DEST}
+        DEPENDS ${INSTALL_FILE}
         )
 
-    add_custom_target(${INSTALL_NAME}.install
+    # install a tagged file if requested
+    if (INSTALL_TAG)
+
+        set (TAGGED_INSTALL_FILE ${INSTALL_DEST}.tag)
+
+        add_custom_command(
+            OUTPUT  ${TAGGED_INSTALL_FILE}
+            COMMAND ${CMAKE_COMMAND} -E copy ${INSTALL_FILE} ${TAGGED_INSTALL_FILE}
+            DEPENDS ${INSTALL_FILE}
+            )
+
+        set (INSTALL_TARGETS "${INSTALL_TARGETS} ${TAGGED_INSTALL_FILE}")
+
+    endif()
+
+    # make clean will remove the installed file
+    set_directory_properties(
+        PROPERTIES
+        ADDITIONAL_MAKE_CLEAN_FILES
+        ${INSTALL_TARGETS})
+
+    # required for add_custom_target
+    separate_arguments(INSTALL_TARGETS)
+
+    # add an install target to ALL
+    add_custom_target(${INSTALL_FILE}.install
         ALL
-        DEPENDS ${INSTALL_DEST}
+        DEPENDS ${INSTALL_TARGETS}
         )
 
+    # if this is part of a module, add the install step to it
     if (INSTALL_MODULE)
         add_to_module(
             ${INSTALL_MODULE} 
-            ${INSTALL_NAME}.install
+            ${INSTALL_FILE}.install
             )
     endif()
 

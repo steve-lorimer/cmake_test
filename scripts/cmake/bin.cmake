@@ -10,9 +10,10 @@ function(bin)
     # SRCS    sources*
     # DEPS    dependencies*
     # INSTALL 
+    # TAG
 
     # parse arguments
-    set(options INSTALL)
+    set(options INSTALL TAG)
     set(values  NAME MODULE)
     set(lists   SRCS DEPS)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
@@ -20,11 +21,16 @@ function(bin)
     add_executable       (${BIN_NAME} ${BIN_SRCS})
     target_link_libraries(${BIN_NAME} ${BIN_DEPS})
 
+    if (BIN_TAG)
+        set(TAG "TAG")
+    endif()
+
     if (BIN_INSTALL)
         install(
-            NAME   ${BIN_NAME}
+            FILE   ${BIN_NAME}
             MODULE ${BIN_MODULE}
             DEST   ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_NAME}
+            ${TAG}
             )
     endif()
 
