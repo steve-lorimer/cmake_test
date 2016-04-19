@@ -1,7 +1,9 @@
-file(GLOB SOURCES "*.cpp")
+bin(
+	NAME app
+	
+	SRCS 
+		main.cpp
+		version.cpp
 
-set(NAME app)
-set(LIBS bar)
-
-add_executable(app ${SOURCES})
-target_link_libraries(app ${LIBS})
+	DEPS libbar
+	)

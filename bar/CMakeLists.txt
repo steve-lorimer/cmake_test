@@ -1,9 +1,9 @@
-add_library(libbar STATIC 
-	bar.cpp
+lib(
+	NAME   libbar
+	STATIC
+	MODULE bar
+	SRCS   bar.cpp
+	DEPS   libfoo
 	)
-
-target_link_libraries(libbar libfoo)
-
-add_to_module(bar libbar)
 
 add_subdirectory(test)

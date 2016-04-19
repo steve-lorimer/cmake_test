@@ -1,4 +1,4 @@
-include(module_utils)
+include(module)
 
 enable_testing()
 
@@ -10,7 +10,8 @@ set (CMAKE_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full -
 set (VALGRIND_CMD                      "${CMAKE_MEMORYCHECK_COMMAND} ${CMAKE_MEMORYCHECK_COMMAND_OPTIONS}")
 separate_arguments(VALGRIND_CMD)
 
-function(register_test)
+
+function(test)
     # - creates a test executable
     # - adds it to ctest
     # - automatically runs the tests and creates a test.passed sentinal file when they pass

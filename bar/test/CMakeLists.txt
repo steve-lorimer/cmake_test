@@ -1,4 +1,4 @@
-register_test(
+test(
 	NAME   bar_test 
 	MODULE bar 
 	SRCS   main.cpp
