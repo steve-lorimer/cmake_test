@@ -27,6 +27,7 @@ function(qt_bin)
 
     require_qt5()
 
+    # qt specific helpers
     if(BIN_MOC)
         qt5_wrap_cpp(BIN_MOC_OUT ${BIN_MOC})
     endif()
@@ -42,8 +43,8 @@ function(qt_bin)
     add_executable       (${BIN_NAME} ${BIN_SRCS} ${BIN_MOC_OUT} ${BIN_RES_OUT} ${BIN_UI_OUT})
     target_link_libraries(${BIN_NAME} ${BIN_DEPS} Qt5::Widgets)
 
+    # install the binary, and optionally a tagged binary, if requested
     if(BIN_INSTALL)
-
         if(BIN_TAG)
             set(TAG "TAG")
         endif()

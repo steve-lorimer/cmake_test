@@ -24,8 +24,8 @@ function(bin)
     add_executable       (${BIN_NAME} ${BIN_SRCS})
     target_link_libraries(${BIN_NAME} ${BIN_DEPS})
 
+    # install the binary, and optionally a tagged binary, if requested
     if(BIN_INSTALL)
-
         if(BIN_TAG)
             set(TAG "TAG")
         endif()

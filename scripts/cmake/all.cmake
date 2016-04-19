@@ -2,6 +2,7 @@ include(ccache)
 include(compile_flags)
 include(default_build)
 include(dependencies)
+include(version)
 
 include(module)
 include(bin)
