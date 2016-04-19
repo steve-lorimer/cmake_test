@@ -1,3 +1,6 @@
-file(GLOB src "*.cpp")
-
-register_test(foo_test foo ${src} libfoo)
+register_test(
+	NAME   foo_test 
+	MODULE foo 
+	SRCS   main.cpp
+	DEPS   libfoo
+	)

@@ -8,6 +8,7 @@ endif()
 # add our custom cmake modules
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/scripts/cmake")
 include(ccache)
+include(module_utils)
 include(test_utils)
 
 include_directories ("${CMAKE_SOURCE_DIR}")

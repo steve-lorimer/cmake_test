@@ -1,3 +1,6 @@
-file(GLOB src "*.cpp")
-
-register_test(bar_test bar ${src} libbar)
+register_test(
+	NAME   bar_test 
+	MODULE bar 
+	SRCS   main.cpp
+	DEPS   libbar
+	)
