@@ -10,10 +10,13 @@ function(install)
     # parse arguments
     set(options TAG)
     set(values  FILE MODULE DEST)
+    set(lists)
     cmake_parse_arguments(INSTALL "${options}" "${values}" "${lists}" "${ARGN}")
 
-    set (INSTALL_TARGETS ${INSTALL_DEST})
+    # variable which hold a list of all installed targets
+    set(INSTALL_TARGETS ${INSTALL_DEST})
 
+    # install the file
     add_custom_command(
         OUTPUT  ${INSTALL_DEST}
         COMMAND ${CMAKE_COMMAND} -E copy ${INSTALL_FILE} ${INSTALL_DEST}
@@ -21,9 +24,8 @@ function(install)
         )
 
     # install a tagged file if requested
-    if (INSTALL_TAG)
-
-        set (TAGGED_INSTALL_FILE ${INSTALL_DEST}.tag)
+    if(INSTALL_TAG)
+        set(TAGGED_INSTALL_FILE ${INSTALL_DEST}.tag)
 
         add_custom_command(
             OUTPUT  ${TAGGED_INSTALL_FILE}
@@ -31,8 +33,7 @@ function(install)
             DEPENDS ${INSTALL_FILE}
             )
 
-        set (INSTALL_TARGETS "${INSTALL_TARGETS} ${TAGGED_INSTALL_FILE}")
-
+        set(INSTALL_TARGETS "${INSTALL_TARGETS} ${TAGGED_INSTALL_FILE}")
     endif()
 
     # make clean will remove the installed file
@@ -51,7 +52,7 @@ function(install)
         )
 
     # if this is part of a module, add the install step to it
-    if (INSTALL_MODULE)
+    if(INSTALL_MODULE)
         add_to_module(
             ${INSTALL_MODULE} 
             ${INSTALL_FILE}.install

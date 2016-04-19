@@ -1,16 +1,14 @@
-# function which 
-# - creates a top level phony target 'module'
-# - adds 'dep' as a dependency of 'module'
-function(add_to_module target dep)
+# creates a top level phony target to which dependencies may be added
+function(add_to_module TARGET DEPENDENCY)
  
-    if (NOT TARGET ${target})
-        add_custom_target(${target}
+    if (NOT TARGET ${TARGET})
+        add_custom_TARGET(${TARGET}
             ALL
             )
     endif()
 
-	add_dependencies(${target}
-		${dep}
+	add_dependencies(${TARGET}
+		${DEPENDENCY}
 		)
 
 endfunction()

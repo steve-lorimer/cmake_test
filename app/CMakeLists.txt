@@ -7,6 +7,5 @@ bin(
 
 	DEPS libbar
 
-	INSTALL
-	TAG
+	INSTALL TAG
 	)

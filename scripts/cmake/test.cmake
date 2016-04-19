@@ -5,9 +5,9 @@ enable_testing()
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 # make tests run through valgrind
-set (CMAKE_MEMORYCHECK_COMMAND         "/usr/bin/valgrind")
-set (CMAKE_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --track-origins=yes --error-exitcode=1 --quiet")
-set (VALGRIND_CMD                      "${CMAKE_MEMORYCHECK_COMMAND} ${CMAKE_MEMORYCHECK_COMMAND_OPTIONS}")
+set(CMAKE_MEMORYCHECK_COMMAND         "/usr/bin/valgrind")
+set(CMAKE_MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --track-origins=yes --error-exitcode=1 --quiet")
+set(VALGRIND_CMD                      "${CMAKE_MEMORYCHECK_COMMAND} ${CMAKE_MEMORYCHECK_COMMAND_OPTIONS}")
 separate_arguments(VALGRIND_CMD)
 
 
@@ -15,12 +15,13 @@ function(test)
     # - creates a test executable
     # - adds it to ctest
     # - automatically runs the tests and creates a test.passed sentinal file when they pass
-    # - adds the tests to 'module' target
+    # - optionally adds the tests to 'module' target
+    #
     # arguments:
     # NAME   test_name
-    # MODULE module
     # SRCS   sources*
     # DEPS   dependencies*
+    # MODULE module
 
     # parse arguments
     set(options)
@@ -53,7 +54,7 @@ function(test)
         )
 
     # add test.run as a dependency of module, so 'make module' will build and run the tests
-    if (TEST_MODULE)
+    if(TEST_MODULE)
         add_to_module(
             ${TEST_MODULE} 
             ${TEST_NAME}.run

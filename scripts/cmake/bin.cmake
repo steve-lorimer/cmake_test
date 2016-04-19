@@ -3,12 +3,15 @@ include(install)
 
 function(bin)
     # - creates a binary 
-    # - adds the binary to 'module' target
+    # - optionally adds the binary to 'module' target
+    # - optionally installs the binary
+    # - optionally installs a tagged binary
+    #
     # arguments:
     # NAME    bin_name
-    # MODULE  module
     # SRCS    sources*
     # DEPS    dependencies*
+    # MODULE  module
     # INSTALL 
     # TAG
 
@@ -21,11 +24,12 @@ function(bin)
     add_executable       (${BIN_NAME} ${BIN_SRCS})
     target_link_libraries(${BIN_NAME} ${BIN_DEPS})
 
-    if (BIN_TAG)
-        set(TAG "TAG")
-    endif()
+    if(BIN_INSTALL)
 
-    if (BIN_INSTALL)
+        if(BIN_TAG)
+            set(TAG "TAG")
+        endif()
+
         install(
             FILE   ${BIN_NAME}
             MODULE ${BIN_MODULE}
@@ -35,7 +39,7 @@ function(bin)
     endif()
 
     # add binary as a dependency of module, so 'make module' will build the binary
-    if (BIN_MODULE)
+    if(BIN_MODULE)
         add_to_module(
             ${BIN_MODULE} 
             ${BIN_NAME}

@@ -11,6 +11,8 @@ qt_bin(
  	    resources.qrc
 
 	DEPS libbar
+
+	INSTALL TAG
 	)
 
 
