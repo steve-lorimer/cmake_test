@@ -2,8 +2,8 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QPushButton>
-#include <QMessageBox>
-#include "bar/bar.h"
+#include <QIcon>
+#include "message.h"
 
 class App
 {
@@ -14,34 +14,26 @@ public:
 
     int exec()
     {
-        window = new QMainWindow();
-
-        QWidget* widget = new QWidget();
-        window->setCentralWidget(widget);
-        widget->setLayout(&layout);
-
+        QMainWindow* window = new QMainWindow;
+        QWidget*     widget = new QWidget;
+        QVBoxLayout* layout = new QVBoxLayout;
         QPushButton* button = new QPushButton("go");
-        QObject::connect(button, &QPushButton::clicked, [&](){ onGo(); });
-        layout.addWidget(button);
+        Message*     msg    = new Message;
+
+        QIcon icon(":/res/icon.png");
+        app.setWindowIcon(icon);
+
+        window->setCentralWidget(widget);
+        widget->setLayout(layout);
+        layout->addWidget(button);
+
+        QObject::connect(button, &QPushButton::clicked, msg, &Message::onGo);
 
         window->show();
         return app.exec();
     }
 
-    void onGo()
-    {
-        QMessageBox(
-            QMessageBox::Icon::Information,
-            "bar output",
-            QString::fromStdString(bar()),
-            QMessageBox::StandardButton::NoButton,
-            window).exec();
-    }
-
-
     QApplication app;
-    QMainWindow* window;
-    QVBoxLayout  layout;
 };
 
 int main(int argc, char** argv)

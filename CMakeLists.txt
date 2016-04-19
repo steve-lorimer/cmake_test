@@ -8,15 +8,18 @@ endif()
 # add our custom cmake modules
 list (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/scripts/cmake")
 include(ccache)
+include(boost)
 include(module)
 include(bin)
+include(qt)
+include(qt_bin)
 include(lib)
 include(test)
 
 include_directories ("${CMAKE_SOURCE_DIR}")
 
 # 3rd party dependencies
-include(require_boost)
+require_boost()
 
 # compiler flags
 if (CMAKE_COMPILER_IS_GNUCXX)
@@ -43,7 +46,7 @@ endif()
 add_subdirectory (foo)
 add_subdirectory (bar)
 add_subdirectory (app)
-#add_subdirectory (gui)
+add_subdirectory (gui)
 
 
 

@@ -12,7 +12,7 @@ alias qt
 constant EXE : gui ;
 
 exe $(EXE)
-:   [ glob *.cpp ]
+:   [ glob *.cpp *.h ]
 	qt
 	/proj/foo//foo
 	/proj/bar//bar
