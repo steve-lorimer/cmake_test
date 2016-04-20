@@ -23,11 +23,11 @@ from [boost build](http://www.boost.org/build/) to [cmake](https://cmake.org/)
 
 - [cmake](https://cmake.org/)
 
-    mkdir build && cd build && cmake .. && make
+    `mkdir build && cd build && cmake .. && make`
 
 - [boost build](http://www.boost.org/build/)
 
-    b2
+    `b2`
 
 ## Features
 
