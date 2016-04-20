@@ -1,14 +1,6 @@
-#include <iostream>
-#include "version.h"
-#include "foo/foo.h"
-#include "bar/bar.h"
+#include "app.h"
 
-int main()
+int main(int argc, char** argv)
 {
-    std::cout << app_version() << '\n'
-              << '\n'
-              << "foo: " << foo() << '\n'
-              << "bar: " << bar() << '\n';
-
-    return 0;
+    return App().run(argc, argv);
 }

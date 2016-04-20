@@ -1,11 +1,17 @@
+find_package(Boost COMPONENTS program_options REQUIRED)
+
 bin(
-	NAME app
+	NAME 
+        app
 	
 	SRCS 
-		main.cpp
+        main.cpp
+        app.cpp
 		version.cpp
 
-	DEPS libbar
+	DEPS 
+        libbar
+        ${Boost_PROGRAM_OPTIONS_LIBRARY}
 
 	INSTALL TAG
 	)

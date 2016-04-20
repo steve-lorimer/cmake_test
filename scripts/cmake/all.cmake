@@ -3,6 +3,7 @@ if(__included_all)
 endif()
 set(__included_all YES)
 
+include(settings)
 include(ccache)
 include(compile_flags)
 include(default_build)
