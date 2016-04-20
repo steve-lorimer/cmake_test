@@ -1,3 +1,8 @@
+if(__included_bin)
+    return()
+endif()
+set(__included_bin YES)
+
 include(module)
 include(install)
 

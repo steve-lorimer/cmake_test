@@ -1,3 +1,8 @@
+if(__included_qt_bin)
+    return()
+endif()
+set(__included_qt_bin YES)
+
 include(qt)
 include(bin)
 

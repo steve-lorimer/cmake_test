@@ -1,3 +1,8 @@
+if(__included_all)
+    return()
+endif()
+set(__included_all YES)
+
 include(ccache)
 include(compile_flags)
 include(default_build)

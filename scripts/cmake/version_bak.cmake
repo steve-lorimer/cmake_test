@@ -1,3 +1,8 @@
+if(__included_version_bak)
+    return()
+endif()
+set(__included_version_bak YES)
+
 include(string)
 
 # commit hash, with dirty status, tags

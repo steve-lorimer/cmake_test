@@ -1,3 +1,8 @@
+if(__included_test)
+    return()
+endif()
+set(__included_test YES)
+
 include(module)
 
 enable_testing()

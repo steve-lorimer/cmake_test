@@ -1,3 +1,8 @@
+if(__included_string)
+    return()
+endif()
+set(__included_string YES)
+
 function(word_count INPUT_STRING NUM_WORDS)
     
     if (INPUT_STRING STREQUAL "")

@@ -1,3 +1,8 @@
+if(__included_qt)
+    return()
+endif()
+set(__included_qt YES)
+
 macro(require_qt5)
 
 	find_package(Qt5Widgets REQUIRED)

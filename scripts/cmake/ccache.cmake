@@ -1,3 +1,8 @@
+if(__included_ccache)
+    return()
+endif()
+set(__included_ccache YES)
+
 # enable ccache if it exsts
 find_program(CCACHE_FOUND ccache)
 

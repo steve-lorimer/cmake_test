@@ -1,3 +1,8 @@
+if(__included_lib)
+    return()
+endif()
+set(__included_lib YES)
+
 function(lib)
     # - creates a library 
     # - adds the library to 'module' target

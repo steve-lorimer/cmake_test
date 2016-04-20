@@ -1,3 +1,8 @@
+if(__included_module)
+    return()
+endif()
+set(__included_module YES)
+
 function(add_to_module MODULE DEPENDENCY)
  
 	# create a phony target MODULE if it doesn't already exist
