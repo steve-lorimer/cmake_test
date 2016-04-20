@@ -32,9 +32,10 @@ function(bin)
     target_link_libraries(${BIN_NAME} 
             ${BIN_LIBS} 
         optimized 
-            tcmalloc_minimal.a 
+            ${TCMALLOC}
         general 
             pthread
+            rt
             )
 
     # target_link_libraries(${BIN_NAME} 
