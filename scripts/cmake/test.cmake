@@ -25,18 +25,18 @@ function(test)
     # arguments:
     # NAME   test_name
     # SRCS   sources*
-    # DEPS   dependencies*
+    # LIBS   dependencies*
     # MODULE module
 
     # parse arguments
     set(options)
     set(values NAME MODULE)
-    set(lists  SRCS DEPS)
+    set(lists  SRCS LIBS)
     cmake_parse_arguments(TEST "${options}" "${values}" "${lists}" "${ARGN}")
  
     # create the test executable, linked against dependencies and boost-test
     add_executable       (${TEST_NAME} ${TEST_SRCS})
-    target_link_libraries(${TEST_NAME} ${TEST_DEPS} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+    target_link_libraries(${TEST_NAME} ${TEST_LIBS} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 	# add the test to ctest
     add_test(

@@ -15,7 +15,7 @@ function(qt_bin)
     # arguments:
     # NAME   bin_name
     # SRCS   sources*
-    # DEPS   dependencies*
+    # LIBS   dependencies*
     # MOC    mocable_headers*
     # RES    qt_resources*
     # UI     qt_ui_files*
@@ -26,7 +26,7 @@ function(qt_bin)
     # parse arguments
     set(options INSTALL TAG)
     set(values  NAME MODULE)
-    set(lists   SRCS DEPS MOC RES UI)
+    set(lists   SRCS LIBS MOC RES UI)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
 
     require_qt5()
@@ -65,8 +65,8 @@ function(qt_bin)
             ${BIN_RES_OUT} 
             ${BIN_UI_OUT}
 
-        DEPS 
-            ${BIN_DEPS} 
+        LIBS 
+            ${BIN_LIBS} 
             Qt5::Widgets
 
         ${INSTALL} ${TAG}

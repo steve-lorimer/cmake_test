@@ -9,9 +9,12 @@ bin(
         app.cpp
 		version.cpp
 
-	DEPS 
+	LIBS 
         libbar
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
+
+    DEPS
+        version_info
 
 	INSTALL TAG
 	)

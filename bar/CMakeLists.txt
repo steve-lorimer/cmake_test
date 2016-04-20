@@ -3,7 +3,7 @@ lib(
 	STATIC
 	MODULE bar
 	SRCS   bar.cpp
-	DEPS   libfoo
+	LIBS   libfoo
 	)
 
 add_subdirectory(test)

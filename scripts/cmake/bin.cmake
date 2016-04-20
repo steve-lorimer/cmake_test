@@ -15,6 +15,7 @@ function(bin)
     # arguments:
     # NAME    bin_name
     # SRCS    sources*
+    # LIBS    libraries*
     # DEPS    dependencies*
     # MODULE  module
     # INSTALL 
@@ -23,11 +24,15 @@ function(bin)
     # parse arguments
     set(options INSTALL TAG)
     set(values  NAME MODULE)
-    set(lists   SRCS DEPS)
+    set(lists   SRCS LIBS DEPS)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
  
     add_executable       (${BIN_NAME} ${BIN_SRCS})
-    target_link_libraries(${BIN_NAME} ${BIN_DEPS})
+    target_link_libraries(${BIN_NAME} ${BIN_LIBS})
+
+    if(BIN_DEPS)
+        add_dependencies (${BIN_NAME} ${BIN_DEPS})
+    endif()
 
     # install the binary, and optionally a tagged binary, if requested
     if(BIN_INSTALL)
