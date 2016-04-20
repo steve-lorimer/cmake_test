@@ -1,28 +1,50 @@
-## Requirements
+# Cmake Project
 
-- `boost-build` : for building the project with bjam
-- `boost-test`  : for unit tests
-- `valgrind`    : for unit tests
-- `qt5`         : for gui
-- `tcmalloc`    : only for `prod` build variant
+This is a small project I used to learn cmake while migrating an existing build system
+from [boost build](http://www.boost.org/build/) to [cmake](https://cmake.org/)
 
-## Existing build system - [boost build](http://www.boost.org/build/)
+## Features
 
-### Features
+### version information
 
-#### Verstion information:
+Version information is generated and injected into the build
 
-Build process calls a script which generates version information and prints details to stdout upon update
+**Files:**
 
-From `Jamroot`:
+- `app/version.sh`: script which generates the version information
+- `scripts/cmake/version.cmake`: cmake function which calls the script
+- `Jamroot`: the version script is called directly from the Jamroot when building with boost-build
 
-    Echo [ SHELL "$(TOP)/app/version.sh $(TOP)" ] ;
+The output of printing this information is similar to this:
 
-Result of running `version.sh` is `app/version_details.h`
+	source version: bd0c2d4
+	num commits:    27
+	branch:         master
+	build variant:  debug
+	build date:     Apr 19 2016 16:49:57
+	ahead by:       1
+	user:           steve
+	hostname:       ky-steve
 
-#### Tagged binaries:
+### Tests
 
-Build process calls a script which tags binaries with version information
+Tests are run as part of the build process
+
+A failing test breaks the build
+
+All tests are run through valgrind
+
+A memory leak breaks the build
+
+**Files:**
+
+- `scripts/cmake/test.cmake`: cmake function which adds the test and configures it to run as part of the build
+- `foo/test/Jamfile`: boost-build provides this functionality built-in via the `run` rule and `<testing-launcher>`
+
+### Tagged binaries:
+
+Binaries can be installed to a specified destination as part of the build, and optionally have version information 
+included in the filename
 
 Version information tagged onto a binary:
 
@@ -30,27 +52,30 @@ Version information tagged onto a binary:
 - `commits` : number of commits in this branch
 - `dirty`   : whether the branch is clean, or has uncommitted changes, untracked files etc
 
-From `Jamroot`:
+**Files:**
 
-    # creates a variable called $(TAG) which contains current build version information
-    local tag = [ SHELL "$(TOP)/scripts/tag.sh" ] ;
-    constant TAG : $(tag) ;
+- `scripts/tag.sh`: script with generates the version information
+- `scripts/cmake/install.cmake`: cmake function which installs the binary, and tags it with version information (wip)
 
-From `app/Jamfile`:
+### Modules
 
-    # use $(TAG) defiend in Jamroot to tag the binary, eg: app.<branch>.<num_commits>.dirty
-    cp $(>) $(>).$(TAG) 
+Related targets can be added to a "module", such that building the module builds all related targets
 
-#### Automated tests:
+eg: `foo` module contains `libfoo` static library and `foo_test`, tests which verify `libfoo`
 
-Tests are part of the build process - a failing test results in a failed build
+`foo` exists as a target in the makefiles. `make foo` builds all related targets.
 
-#### Custom test launchers:
+**Files:**
 
-Tests can be run through custom launchers, for example, `valgrind`, so we can verify there are no memory leaks
+- `scripts/module.sh`: script with creates the module target and adds a related target as a dependency
 
-From `foo/test/Jamfile`:
+## Build settings
 
-    <testing.launcher>"valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet"
+Top level `CMakeLists.txt` includes `all.cmake`, which pulls in all the custom cmake scripts.
 
-If `valgrind` exits with an error (`--error-exitcode=1`), the build fails
+Additionally, `all.cmake` pulls in several scripts which configure the build
+
+- `scripts/cmake/ccache.cmake`: builds through `ccache` if it is found
+- `scripts/cmake/default_build.cmake`: sets the default build to `Debug` if it hasn't been specified
+- `scripts/cmake/compile_flags.cmake`: compiler flags set for the build
+- `scripts/cmake/dependencies.cmake`: pulls in 3rd part dependencies

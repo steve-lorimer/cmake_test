@@ -7,9 +7,3 @@ run
       <testing.arg>" --report_level=detailed"
 : foo-tests
 ;
-
-
-#unit-test foo-tests
-#:   [ glob *.cpp ]
-#    ..//foo
-#;
