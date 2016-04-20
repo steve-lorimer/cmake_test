@@ -1,14 +1,15 @@
-# creates a top level phony target to which dependencies may be added
-function(add_to_module TARGET DEPENDENCY)
+function(add_to_module MODULE DEPENDENCY)
  
-    if (NOT TARGET ${TARGET})
-        add_custom_TARGET(${TARGET}
+	# create a phony target MODULE if it doesn't already exist
+    if (NOT TARGET ${MODULE})
+        add_custom_TARGET(${MODULE}
             ALL
             )
     endif()
 
-	add_dependencies(${TARGET}
-		${DEPENDENCY}
-		)
+    # add the dependency to be built when MODULE is built
+    add_dependencies(${MODULE}
+        ${DEPENDENCY}
+        )
 
 endfunction()

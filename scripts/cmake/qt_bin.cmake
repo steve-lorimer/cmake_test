@@ -1,6 +1,5 @@
 include(qt)
-include(module)
-include(install)
+include(bin)
 
 function(qt_bin)
     # - creates a qt binary 
@@ -40,30 +39,33 @@ function(qt_bin)
         qt5_wrap_ui(BIN_UI_OUT ${BIN_UI})
     endif()
 
-    add_executable       (${BIN_NAME} ${BIN_SRCS} ${BIN_MOC_OUT} ${BIN_RES_OUT} ${BIN_UI_OUT})
-    target_link_libraries(${BIN_NAME} ${BIN_DEPS} Qt5::Widgets)
-
-    # install the binary, and optionally a tagged binary, if requested
+    # create variables for passing on whether the user requested INSTALL and TAG
     if(BIN_INSTALL)
+        
+        set(INSTALL "INSTALL")
+
         if(BIN_TAG)
             set(TAG "TAG")
         endif()
 
-        install(
-            FILE   ${BIN_NAME}
-            MODULE ${BIN_MODULE}
-            DEST   ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_NAME}
-            ${TAG}
-            )
     endif()
 
-    # add binary as a dependency of module, so 'make module' will build the lib
-    if(BIN_MODULE)
-        add_to_module(
-            ${BIN_MODULE} 
-            ${BIN_NAME}
-            )
-    endif()
+    # build the binary, linking in Qt5 widgets
+    bin(
+        NAME ${BIN_NAME}
+        
+        SRCS 
+            ${BIN_SRCS} 
+            ${BIN_MOC_OUT} 
+            ${BIN_RES_OUT} 
+            ${BIN_UI_OUT}
+
+        DEPS 
+            ${BIN_DEPS} 
+            Qt5::Widgets
+
+        ${INSTALL} ${TAG}
+        )
 
 endfunction()
 
