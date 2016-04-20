@@ -3,6 +3,7 @@ constant EXE : app ;
 exe $(EXE)
 :   [ glob *.cpp ]
 	/proj/bar//bar
+: <find-static-library>boost_program_options
 ;
 
 ################

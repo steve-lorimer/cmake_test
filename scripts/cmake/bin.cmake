@@ -27,8 +27,24 @@ function(bin)
     set(lists   SRCS LIBS DEPS)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
  
-    add_executable       (${BIN_NAME} ${BIN_SRCS})
-    target_link_libraries(${BIN_NAME} ${BIN_LIBS})
+    add_executable(${BIN_NAME} ${BIN_SRCS})
+
+    target_link_libraries(${BIN_NAME} 
+            ${BIN_LIBS} 
+        optimized 
+            tcmalloc_minimal.a 
+        general 
+            pthread
+            )
+
+    # target_link_libraries(${BIN_NAME} 
+    #     -Wl,--start-group 
+    #             ${BIN_LIBS} 
+    #             pthread 
+    #         optimized 
+    #             tcmalloc_minimal.a 
+    #     -Wl,--end-group
+    #     )
 
     if(BIN_DEPS)
         add_dependencies (${BIN_NAME} ${BIN_DEPS})

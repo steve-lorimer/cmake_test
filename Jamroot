@@ -42,6 +42,7 @@ project proj
     <library-path>/usr/local/lib
     <library-path>/usr/lib64
     <library-path>/usr/lib/x86_64-linux-gnu
+    <find-shared-library>pthread
 ;
 
 use-project /proj/foo  : foo ;
