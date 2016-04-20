@@ -3,6 +3,32 @@
 This is a small project I used to learn cmake while migrating an existing build system
 from [boost build](http://www.boost.org/build/) to [cmake](https://cmake.org/)
 
+## Structure
+
+	root
+	|
+	+---- foo                      # static library 
+	|     |
+	|     +---- test               # test for foo
+	|
+	+---- bar                      # static library, uses foo 
+	|     |
+	|     +---- test               # test for bar
+	|
+	+---- app                      # command line app, uses foo and bar
+	|
+	+---- gui                      # qt5 app, uses foo and bar
+
+## Build
+
+- [cmake](https://cmake.org/)
+
+    mkdir build && cd build && cmake .. && make
+
+- [boost build](http://www.boost.org/build/)
+
+    b2
+
 ## Features
 
 ### version information
