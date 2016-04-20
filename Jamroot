@@ -4,7 +4,7 @@ import common ;
 path-constant TOP : . ;
 
 # generate current version information 
-Echo [ SHELL "$(TOP)/app/version.sh $(TOP)" ] ;
+Echo [ SHELL "$(TOP)/scripts/version.sh $(TOP)" ] ;
 
 # generate tagging information to be used when installing binaries
 local tag = [ SHELL "$(TOP)/scripts/tag.sh" ] ;

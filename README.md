@@ -37,7 +37,7 @@ Version information is generated and injected into the build
 
 **Files:**
 
-- `app/version.sh`: script which generates the version information
+- `scripts/version.sh`: script which generates the version information
 - `scripts/cmake/version.cmake`: cmake function which calls the script
 - `Jamroot`: the version script is called directly from the Jamroot when building with boost-build
 
