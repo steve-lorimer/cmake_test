@@ -1,7 +1,4 @@
-if(__included_lib)
-    return()
-endif()
-set(__included_lib YES)
+include_guard(__included_lib)
 
 function(find_static_library LIB_NAME OUT)
 

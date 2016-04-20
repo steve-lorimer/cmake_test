@@ -1,7 +1,4 @@
-if(__included_install)
-    return()
-endif()
-set(__included_install YES)
+include_guard(__included_install)
 
 include(module)
 include(version)

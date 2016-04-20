@@ -1,7 +1,4 @@
-if(__included_default_build)
-    return()
-endif()
-set(__included_default_build YES)
+include_guard(__included_default_build)
 
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Debug")

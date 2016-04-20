@@ -1,7 +1,4 @@
-if(__included_qt_bin)
-    return()
-endif()
-set(__included_qt_bin YES)
+include_guard(__included_qt_bin)
 
 include(qt)
 include(bin)

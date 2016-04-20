@@ -1,6 +1,1 @@
-if(__included_settings)
-    return()
-endif()
-set(__included_settings YES)
-
-
+include_guard(__included_settings)

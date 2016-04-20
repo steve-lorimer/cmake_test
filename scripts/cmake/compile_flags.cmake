@@ -1,7 +1,4 @@
-if(__included_compile_flags)
-    return()
-endif()
-set(__included_compile_flags YES)
+include_guard(__included_compile_flags)
 
 # helper macros for setting flags
 

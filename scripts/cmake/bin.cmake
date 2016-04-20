@@ -1,7 +1,4 @@
-if(__included_bin)
-    return()
-endif()
-set(__included_bin YES)
+include_guard(__included_bin)
 
 include(module)
 include(install)
