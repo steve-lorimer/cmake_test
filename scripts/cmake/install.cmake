@@ -1,4 +1,10 @@
+if(__included_install)
+    return()
+endif()
+set(__included_install YES)
+
 include(module)
+include(version)
 
 function(install)
     # arguments:
@@ -25,10 +31,12 @@ function(install)
 
     # install a tagged file if requested
     if(INSTALL_TAG)
-        set(TAGGED_INSTALL_FILE ${INSTALL_DEST}.tag)
+        version_tag(TAG)
+        set(TAGGED_INSTALL_FILE ${INSTALL_DEST}.${TAG})
 
         add_custom_command(
             OUTPUT  ${TAGGED_INSTALL_FILE}
+            COMMAND ${CMAKE_SOURCE_DIR}/scripts/rm_tagged_output.sh ${INSTALL_DEST} short
             COMMAND ${CMAKE_COMMAND} -E copy ${INSTALL_FILE} ${TAGGED_INSTALL_FILE}
             DEPENDS ${INSTALL_FILE}
             )
