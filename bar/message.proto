@@ -1,0 +1,4 @@
+message BarMsg
+{
+    required string s = 1;
+}

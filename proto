@@ -1,0 +1,21 @@
+#!/bin/bash
+
+readonly FILES=$(find . -name '*.proto')
+
+for proto in ${FILES}
+do
+	hdr=$(echo ${proto} | sed 's/\(.*\).proto/\1.pb.h/')
+
+	action=''
+	
+	if [ ! -f ${hdr} ]; then
+		action='generate'
+	elif [ ${proto} -nt ${hdr} ]; then
+		action='regenerate'
+	fi
+
+	if [ ! -z ${action} ]; then
+		echo "${action} ${proto}"
+		protoc --cpp_out ./ -I. ${proto}
+	fi
+done
