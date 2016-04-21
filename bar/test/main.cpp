@@ -5,5 +5,5 @@
 
 BOOST_AUTO_TEST_CASE(bar_test)
 {
-    BOOST_REQUIRE_EQUAL(bar(), "foo bar");
+    BOOST_REQUIRE_EQUAL(bar(), "123 bar");
 }

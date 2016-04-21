@@ -32,7 +32,7 @@ int App::run(int argc, char** argv)
 
     std::cout << app_version() << '\n'
               << '\n'
-              << "foo: " << foo() << '\n'
-              << "bar: " << bar() << '\n';
+              << "foo.size: " << foo().size() << '\n'
+              << "bar: "      << bar() << '\n';
     return 0;
 }

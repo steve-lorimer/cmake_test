@@ -3,5 +3,10 @@
 
 std::string bar()
 {
-	return foo() + " bar";
+    FooT f = foo();
+
+    std::string s;
+    for (int i : f)
+        s += std::to_string(i);
+	return s + " bar";
 }

@@ -1,4 +1,6 @@
 #pragma once
-#include <string>
+#include <EASTL/fixed_vector.h>
 
-std::string foo();
+using FooT = eastl::fixed_vector<int, 5>;
+
+FooT foo();

@@ -1,0 +1,11 @@
+lib eastl
+:    [ glob src/*.cpp ]
+:    <include>include/
+     <cxxflags>-Wno-unused-local-typedefs
+     <cxxflags>-Wno-unused-parameter
+:
+:    <include>include/
+     <cxxflags>-Wno-unused-local-typedefs
+     <cxxflags>-Wno-unused-parameter
+;
+

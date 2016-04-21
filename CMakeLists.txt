@@ -6,6 +6,7 @@ include(all)
 
 include_directories ("${CMAKE_SOURCE_DIR}")
 
+add_subdirectory (3rd-party)
 add_subdirectory (foo)
 add_subdirectory (bar)
 add_subdirectory (app)
