@@ -12,6 +12,7 @@ function(bin)
     # arguments:
     # NAME    bin_name
     # SRCS    sources*
+    # PROTO   protobuf files*
     # LIBS    libraries*
     # DEPS    dependencies*
     # MODULE  module
@@ -21,20 +22,30 @@ function(bin)
     # parse arguments
     set(options INSTALL TAG)
     set(values  NAME MODULE)
-    set(lists   SRCS LIBS DEPS)
+    set(lists   SRCS PROTO LIBS DEPS)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
  
-    add_executable(${BIN_NAME} ${BIN_SRCS})
+    if (BIN_PROTO)
+        protobuf_generate_cpp(
+            PROTO_SRCS
+            PROTO_HDRS
+                ${BIN_PROTO}
+        )
+        # protobuf files are put into the binary output directory
+        include_directories(${CMAKE_CURRENT_BINARY_DIR})
+    endif()
+
+    add_executable(${BIN_NAME} ${BIN_SRCS} ${PROTO_SRCS})
 
     target_link_libraries(${BIN_NAME} 
             ${BIN_LIBS} 
-        optimized 
-            ${TCMALLOC}
-        general 
             pthread
             rt
+        optimized 
+            ${TCMALLOC}
             )
 
+    # in case we get linking problems that are too finicky to solve
     # target_link_libraries(${BIN_NAME} 
     #     -Wl,--start-group 
     #             ${BIN_LIBS} 

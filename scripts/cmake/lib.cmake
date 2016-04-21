@@ -3,10 +3,12 @@ include_guard(__included_lib)
 function(lib)
     # - creates a library 
     # - adds the library to 'module' target
+    #
     # arguments:
     # NAME   lib_name
     # MODULE module
     # SRCS   sources*
+    # PROTO  protobuf files*
     # LIBS   dependencies*
     # STATIC/SHARED
 
