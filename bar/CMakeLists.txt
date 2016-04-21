@@ -1,7 +1,3 @@
-find_shared_lib(protobuf PROTOBUF)
-
-message(STATUS "protobuf lib: ${PROTOBUF}")
-
 lib(
 	NAME   
         libbar
@@ -10,11 +6,11 @@ lib(
         bar
 	SRCS   
         bar.cpp 
-        message.pb.cc
-
+    PROTO
+        message.proto
 	LIBS   
         libfoo 
-        ${PROTOBUF}
+        ${PROTOBUF_LIBRARIES}
 	)
 
 add_subdirectory(test)

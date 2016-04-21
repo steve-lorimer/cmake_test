@@ -13,7 +13,7 @@ function(lib)
     # parse arguments
     set(options STATIC SHARED)
     set(values  NAME MODULE)
-    set(lists   SRCS LIBS)
+    set(lists   SRCS PROTO LIBS)
     cmake_parse_arguments(LIB "${options}" "${values}" "${lists}" "${ARGN}")
  
     # link type
@@ -25,7 +25,17 @@ function(lib)
         message (SEND_ERROR "No linking type specified for ${LIB_NAME} library")
     endif()
 
-    add_library          (${LIB_NAME} ${LINK} ${LIB_SRCS})
+    if (LIB_PROTO)
+        protobuf_generate_cpp(
+            PROTO_SRCS
+            PROTO_HDRS
+                ${LIB_PROTO}
+        )
+        # protobuf files are put into the binary output directory
+        include_directories(${CMAKE_CURRENT_BINARY_DIR})
+    endif()
+
+    add_library          (${LIB_NAME} ${LINK} ${LIB_SRCS} ${PROTO_SRCS})
     target_link_libraries(${LIB_NAME} ${LIB_LIBS})
 
     # add lib as a dependency of module, so 'make module' will build the lib
