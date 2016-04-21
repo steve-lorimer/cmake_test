@@ -25,6 +25,10 @@ function(bin)
     set(lists   SRCS PROTO LIBS DEPS)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
  
+    if (DEBUG_CMAKE)
+        message(STATUS "BIN: NAME=${BIN_NAME} MODULE=${BIN_MODULE} PROTO=${BIN_PROTO} LIBS=${BIN_LIBS} DEPS=${BIN_DEPS} INSTALL=${BIN_INSTALL} TAG=${BIN_TAG}")
+    endif()
+
     # generate protobuf files if required
     if (BIN_PROTO)
         protobuf_generate_cpp(

@@ -12,6 +12,7 @@ function(qt_bin)
     # arguments:
     # NAME   bin_name
     # SRCS   sources*
+    # PROTO   protobuf files*
     # LIBS   dependencies*
     # MOC    mocable_headers*
     # RES    qt_resources*
@@ -23,8 +24,12 @@ function(qt_bin)
     # parse arguments
     set(options INSTALL TAG)
     set(values  NAME MODULE)
-    set(lists   SRCS LIBS MOC RES UI)
+    set(lists   SRCS PROTO LIBS DEPS MOC RES UI)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
+
+    if (DEBUG_CMAKE)
+        message(STATUS "QT_BIN: NAME=${BIN_NAME} MODULE=${BIN_MODULE} PROTO=${BIN_PROTO} LIBS=${BIN_LIBS} DEPS=${BIN_DEPS} MOC=${BIN_MOC} RES=${BIN_RES} UI=${BIN_UI} INSTALL=${BIN_INSTALL} TAG=${BIN_TAG}")
+    endif()
 
     require_qt5()
 
@@ -62,9 +67,15 @@ function(qt_bin)
             ${BIN_RES_OUT} 
             ${BIN_UI_OUT}
 
+        PROTO
+            ${BIN_PROTO}
+
         LIBS 
             ${BIN_LIBS} 
             Qt5::Widgets
+
+        DEPS
+            ${BIN_DEPS}
 
         ${INSTALL} ${TAG}
         )
