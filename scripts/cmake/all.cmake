@@ -9,6 +9,7 @@ include(dependencies)
 include(version)
 
 include(module)
+include(find_lib)
 include(bin)
 include(qt)
 include(qt_bin)

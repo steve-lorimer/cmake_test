@@ -1,6 +1,6 @@
 include_guard(__included_dependencies)
 
-include(lib)
+include(find_lib)
 
 set(Boost_USE_STATIC_LIBS ON)
 

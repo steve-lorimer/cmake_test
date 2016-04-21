@@ -49,7 +49,7 @@ add_flag       (-msse4.2)
 add_flag       (-mfpmath=sse)
 add_flag       (-ftemplate-depth-128)
 add_linker_flag(-m64)
-add_linker_flag(-rdynamic)
+add_linker_flag(-rdynamic)                 # required for backtrace
 
 ##########################################################################
 # debug mode

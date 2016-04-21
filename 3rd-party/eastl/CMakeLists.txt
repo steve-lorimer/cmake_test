@@ -7,6 +7,6 @@ lib(
     SRCS   ${SRCS}
     )
 
-target_include_directories(eastl PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
-target_compile_options    (eastl PUBLIC -Wno-unused-local-typedefs)
-target_compile_options    (eastl PUBLIC -Wno-unused-parameter)
+target_include_directories(eastl SYSTEM PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
+target_compile_options    (eastl PRIVATE -Wno-unused-local-typedefs)
+target_compile_options    (eastl PRIVATE -Wno-unused-parameter)
