@@ -1,4 +1,5 @@
 include_guard(__included_compile_flags)
+include(default_build)
 
 # helper macros for setting flags
 
@@ -78,9 +79,9 @@ add_release_flag(-fno-builtin-free)
 ##########################################################################
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message(STATUS "Debug build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_DEBUG}")    
-    message(STATUS "Debug build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_DEBUG}")    
+    message(STATUS "${CMAKE_BUILD_TYPE} build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_DEBUG}")    
+    message(STATUS "${CMAKE_BUILD_TYPE} build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_DEBUG}")    
 else()
-    message(STATUS "Release build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_RELEASE}")    
-    message(STATUS "Release build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_RELEASE}")    
+    message(STATUS "${CMAKE_BUILD_TYPE} build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_RELEASE}")    
+    message(STATUS "${CMAKE_BUILD_TYPE} build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_RELEASE}")    
 endif()
