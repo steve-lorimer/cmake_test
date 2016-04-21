@@ -31,6 +31,9 @@ function(bin)
             PROTO_HDRS
                 ${BIN_PROTO}
         )
+
+        set(PROTO_LIBS ${PROTOBUF_LIBRARIES})
+
         # protobuf files are put into the binary output directory
         include_directories(${CMAKE_CURRENT_BINARY_DIR})
     endif()
@@ -43,6 +46,7 @@ function(bin)
             rt
         optimized 
             ${TCMALLOC}
+            ${PROTO_LIBS}
             )
 
     # in case we get linking problems that are too finicky to solve

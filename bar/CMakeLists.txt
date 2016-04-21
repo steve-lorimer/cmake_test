@@ -10,7 +10,6 @@ lib(
         message.proto
 	LIBS   
         libfoo 
-        ${PROTOBUF_LIBRARIES}
 	)
 
 add_subdirectory(test)

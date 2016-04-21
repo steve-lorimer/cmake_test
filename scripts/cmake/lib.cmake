@@ -33,12 +33,15 @@ function(lib)
             PROTO_HDRS
                 ${LIB_PROTO}
         )
+
+        set(PROTO_LIBS ${PROTOBUF_LIBRARIES})
+
         # protobuf files are put into the binary output directory
         include_directories(${CMAKE_CURRENT_BINARY_DIR})
     endif()
 
     add_library          (${LIB_NAME} ${LINK} ${LIB_SRCS} ${PROTO_SRCS})
-    target_link_libraries(${LIB_NAME} ${LIB_LIBS})
+    target_link_libraries(${LIB_NAME} ${LIB_LIBS} ${PROTO_LIBS})
 
     # add lib as a dependency of module, so 'make module' will build the lib
     if (LIB_MODULE)
