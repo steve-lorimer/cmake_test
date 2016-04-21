@@ -77,9 +77,10 @@ add_release_flag(-fno-builtin-free)
 
 ##########################################################################
 
-message(STATUS "CXX_FLAGS:${CMAKE_CXX_FLAGS}")
-message(STATUS "DEBUG_CXX_FLAGS:${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "RELEASE_CXX_FLAGS:${CMAKE_CXX_FLAGS_RELEASE}")
-message(STATUS "LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}")
-message(STATUS "DEBUG_LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
-message(STATUS "RELEASE_LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Debug build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_DEBUG}")    
+    message(STATUS "Debug build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_DEBUG}")    
+else()
+    message(STATUS "Release build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_RELEASE}")    
+    message(STATUS "Release build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_RELEASE}")    
+endif()
