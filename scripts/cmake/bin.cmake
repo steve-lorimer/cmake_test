@@ -25,13 +25,15 @@ function(bin)
     set(lists   SRCS PROTO LIBS DEPS)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
  
+    # generate protobuf files if required
     if (BIN_PROTO)
         protobuf_generate_cpp(
             PROTO_SRCS
             PROTO_HDRS
                 ${BIN_PROTO}
-        )
+            )
 
+        # automatically link against the protobuf libraries if proto files have been specified
         set(PROTO_LIBS ${PROTOBUF_LIBRARIES})
 
         # protobuf files are put into the binary output directory

@@ -19,21 +19,21 @@ function(lib)
     cmake_parse_arguments(LIB "${options}" "${values}" "${lists}" "${ARGN}")
  
     # link type
-    if (LIB_STATIC)
-        set(LINK STATIC)
-    elseif (LIB_SHARED)
+    if (LIB_SHARED)
         set(LINK SHARED)
     else()
-        message (SEND_ERROR "No linking type specified for ${LIB_NAME} library")
+        set(LINK STATIC) # default to STATIC if nothing is specified
     endif()
 
+    # generate protobuf files if required
     if (LIB_PROTO)
         protobuf_generate_cpp(
             PROTO_SRCS
             PROTO_HDRS
                 ${LIB_PROTO}
-        )
+            )
 
+        # automatically link against the protobuf libraries if proto files have been specified
         set(PROTO_LIBS ${PROTOBUF_LIBRARIES})
 
         # protobuf files are put into the binary output directory
@@ -45,7 +45,10 @@ function(lib)
 
     # add lib as a dependency of module, so 'make module' will build the lib
     if (LIB_MODULE)
-        add_to_module(${LIB_MODULE} ${LIB_NAME})
+        add_to_module(
+            ${LIB_MODULE} 
+            ${LIB_NAME}
+            )
     endif()
 
 endfunction()
