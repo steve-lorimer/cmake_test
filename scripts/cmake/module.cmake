@@ -1,7 +1,4 @@
-if(__included_module)
-    return()
-endif()
-set(__included_module YES)
+include_guard(__included_module)
 
 function(create_module MODULE)
  

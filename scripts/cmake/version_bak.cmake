@@ -1,7 +1,4 @@
-if(__included_version_bak)
-    return()
-endif()
-set(__included_version_bak YES)
+include_guard(__included_version_bak)
 
 include(string)
 

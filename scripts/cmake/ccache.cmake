@@ -1,7 +1,4 @@
-if(__included_ccache)
-    return()
-endif()
-set(__included_ccache YES)
+include_guard(__included_ccache)
 
 # enable ccache if it exsts
 find_program(CCACHE_FOUND ccache)

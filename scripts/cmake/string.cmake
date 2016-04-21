@@ -1,7 +1,4 @@
-if(__included_string)
-    return()
-endif()
-set(__included_string YES)
+include_guard(__included_string)
 
 function(word_count INPUT_STRING NUM_WORDS)
     

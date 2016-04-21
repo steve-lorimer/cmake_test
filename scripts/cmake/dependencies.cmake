@@ -1,7 +1,4 @@
-if(__included_dependencies)
-    return()
-endif()
-set(__included_dependencies YES)
+include_guard(__included_dependencies)
 
 include(lib)
 

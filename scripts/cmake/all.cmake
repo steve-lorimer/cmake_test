@@ -1,7 +1,5 @@
-if(__included_all)
-    return()
-endif()
-set(__included_all YES)
+include(include_guard)
+include_guard(__included_all)
 
 include(settings)
 include(ccache)

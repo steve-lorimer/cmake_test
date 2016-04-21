@@ -1,7 +1,4 @@
-if(__included_version)
-    return()
-endif()
-set(__included_version YES)
+include_guard(__included_version)
 
 add_custom_target(
 	version_info
