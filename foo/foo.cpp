@@ -6,9 +6,9 @@ FooT foo()
     // byte = unsigned char;
 
     // uncomment to test that memory leaks break the build
-	// purposeful memory leak to get valgrind to barf
-	// const char* s = new char[5];
-	// (void)s;
+    // purposeful memory leak to get valgrind to barf
+    // const char* s = new char[5];
+    // (void)s;
 
 
     FooT f;
@@ -20,5 +20,5 @@ FooT foo()
     f.push_back(2);
     f.push_back(3);
 
-	return f;
+    return f;
 }

@@ -5,19 +5,19 @@ from [boost build](http://www.boost.org/build/) to [cmake](https://cmake.org/)
 
 ## Structure
 
-	root
-	|
-	+---- foo                      # static library 
-	|     |
-	|     +---- test               # test for foo
-	|
-	+---- bar                      # static library, uses foo 
-	|     |
-	|     +---- test               # test for bar
-	|
-	+---- app                      # command line app, uses foo and bar
-	|
-	+---- gui                      # qt5 app, uses foo and bar
+    root
+    |
+    +---- foo                      # static library 
+    |     |
+    |     +---- test               # test for foo
+    |
+    +---- bar                      # static library, uses foo 
+    |     |
+    |     +---- test               # test for bar
+    |
+    +---- app                      # command line app, uses foo and bar
+    |
+    +---- gui                      # qt5 app, uses foo and bar
 
 ## Build
 
@@ -43,14 +43,14 @@ Version information is generated and injected into the build
 
 The output of printing this information is similar to this:
 
-	source version: bd0c2d4
-	num commits:    27
-	branch:         master
-	build variant:  debug
-	build date:     Apr 19 2016 16:49:57
-	ahead by:       1
-	user:           steve
-	hostname:       ky-steve
+    source version: bd0c2d4
+    num commits:    27
+    branch:         master
+    build variant:  debug
+    build date:     Apr 19 2016 16:49:57
+    ahead by:       1
+    user:           steve
+    hostname:       ky-steve
 
 ### Tests
 

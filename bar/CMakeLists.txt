@@ -1,15 +1,15 @@
 lib(
-	NAME   
+    NAME   
         libbar
-	STATIC
-	MODULE
+    STATIC
+    MODULE
         bar
-	SRCS   
+    SRCS   
         bar.cpp 
     PROTO
         message.proto
-	LIBS   
+    LIBS   
         libfoo 
-	)
+    )
 
 add_subdirectory(test)

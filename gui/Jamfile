@@ -13,9 +13,9 @@ constant EXE : gui ;
 
 exe $(EXE)
 :   [ glob *.cpp *.h ]
-	qt
-	/proj/foo//foo
-	/proj/bar//bar
+    qt
+    /proj/foo//foo
+    /proj/bar//bar
 ;
 
 ################

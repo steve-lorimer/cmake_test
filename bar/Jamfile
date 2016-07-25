@@ -1,6 +1,6 @@
 lib bar
 :   [ glob *.cpp ]
-	/proj/foo//foo
+    /proj/foo//foo
 ;
 
 build-project test ;

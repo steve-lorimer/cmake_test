@@ -1,18 +1,18 @@
 qt_bin(
-	NAME gui
-	
-	SRCS 
-		main.cpp
+    NAME gui
+    
+    SRCS 
+        main.cpp
 
-	MOC
-	 	message.h
+    MOC
+         message.h
 
- 	RES
- 	    resources.qrc
+     RES
+         resources.qrc
 
-	LIBS libbar
+    LIBS libbar
 
-	INSTALL TAG
-	)
+    INSTALL TAG
+    )
 
 

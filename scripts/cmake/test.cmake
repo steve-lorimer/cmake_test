@@ -35,7 +35,7 @@ function(test)
     add_executable       (${TEST_NAME} ${TEST_SRCS})
     target_link_libraries(${TEST_NAME} ${TEST_LIBS} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
-	# add the test to ctest
+    # add the test to ctest
     add_test(
         NAME    ${TEST_NAME}
         COMMAND ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}>

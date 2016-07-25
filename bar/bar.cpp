@@ -13,7 +13,7 @@ std::string bar()
     for (int i : f)
         s += std::to_string(i);
 
-	return s + m.s();
+    return s + m.s();
 }
 
 namespace
