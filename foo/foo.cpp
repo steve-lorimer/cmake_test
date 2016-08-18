@@ -10,7 +10,6 @@ FooT foo()
     // const char* s = new char[5];
     // (void)s;
 
-
     FooT f;
 
     // uncomment to test that failing tests break the build
@@ -21,4 +20,11 @@ FooT foo()
     f.push_back(3);
 
     return f;
+}
+
+FooMsg foo_msg()
+{
+    FooMsg msg;
+    msg.set_s("foo");
+    return msg;
 }

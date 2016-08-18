@@ -17,30 +17,30 @@ write_version_file()
     local filename=${1}
 
     cat <<- EOF > ${filename}
-    #pragma once
+	#pragma once
 
-    /*
-    * Version information
-    *
-    * - This is a generated file - do not edit
-    */
+	/*
+	* Version information
+	*
+	* - This is a generated file - do not edit
+	*/
 
-    #ifndef NDEBUG
-    #  define _BUILD_VARIANT "debug"
-    #else
-    #  define _BUILD_VARIANT "release"
-    #endif
+	#ifndef NDEBUG
+	#  define _BUILD_VARIANT "debug"
+	#else
+	#  define _BUILD_VARIANT "release"
+	#endif
 
-    static const char VERSION[]       = "${VERSION}";
-    static const char NUM_COMMITS[]   = "${NUM_COMMITS}";
-    static const char BRANCH[]        = "${BRANCH}";
-    static const char AHEAD_BY[]      = "${AHEAD_BY}";
-    static const char NUM_UNTRACKED[] = "${NUM_UNTRACKED}";
-    static const char USER[]          = "${USER}";
-    static const char HOSTNAME[]      = "${HOSTNAME}";
-    static const char BUILD_VARIANT[] = _BUILD_VARIANT;
-    static const char BUILD_DATE[]    = __DATE__ " "  __TIME__;
-    EOF
+	static const char VERSION[]       = "${VERSION}";
+	static const char NUM_COMMITS[]   = "${NUM_COMMITS}";
+	static const char BRANCH[]        = "${BRANCH}";
+	static const char AHEAD_BY[]      = "${AHEAD_BY}";
+	static const char NUM_UNTRACKED[] = "${NUM_UNTRACKED}";
+	static const char USER[]          = "${USER}";
+	static const char HOSTNAME[]      = "${HOSTNAME}";
+	static const char BUILD_VARIANT[] = _BUILD_VARIANT;
+	static const char BUILD_DATE[]    = __DATE__ " "  __TIME__;
+	EOF
 }
 
 copy_if_different()
@@ -71,4 +71,3 @@ main()
     copy_if_different ${src_file} ${dst_file}
 }
 main "$@"
-

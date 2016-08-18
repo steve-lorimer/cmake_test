@@ -1,7 +1,7 @@
 include_guard(__included_lib)
 
 function(lib)
-    # - creates a library 
+    # - creates a library
     # - adds the library to 'module' target
     #
     # arguments:
@@ -17,9 +17,9 @@ function(lib)
     set(values  NAME MODULE)
     set(lists   SRCS PROTO LIBS)
     cmake_parse_arguments(LIB "${options}" "${values}" "${lists}" "${ARGN}")
- 
+
     if (DEBUG_CMAKE)
-        message(STATUS "LIB: NAME=${LIB_NAME} MODULE=${LIB_MODULE} PROTO=${LIB_PROTO} LIBS=${LIB_LIBS} DEPS=${LIB_DEPS}")
+        message(STATUS "LIB: NAME=${LIB_NAME} MODULE=${LIB_MODULE} PROTO=${LIB_PROTO} LIBS=${LIB_LIBS} DEPS=${LIB_DEPS} SRCS=${LIB_SRCS}")
     endif()
 
     # link type
@@ -50,10 +50,9 @@ function(lib)
     # add lib as a dependency of module, so 'make module' will build the lib
     if (LIB_MODULE)
         add_to_module(
-            ${LIB_MODULE} 
+            ${LIB_MODULE}
             ${LIB_NAME}
             )
     endif()
 
 endfunction()
-

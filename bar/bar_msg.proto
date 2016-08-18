@@ -1,0 +1,7 @@
+import "foo/foo_msg.proto";
+
+message BarMsg
+{
+    required string s = 1;
+    required FooMsg f = 2;
+}

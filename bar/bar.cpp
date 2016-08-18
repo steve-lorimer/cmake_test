@@ -1,5 +1,5 @@
 #include "bar.h"
-#include "message.pb.h"
+#include "bar_msg.pb.h"
 #include "foo/foo.h"
 
 std::string bar()
@@ -8,12 +8,13 @@ std::string bar()
 
     BarMsg m;
     m.set_s(" bar");
+    m.mutable_f()->set_s(foo_msg().s());
 
     std::string s;
     for (int i : f)
         s += std::to_string(i);
 
-    return s + m.s();
+    return s + m.s() + " " + m.f().s();
 }
 
 namespace
@@ -22,7 +23,7 @@ namespace
     // this class forces the library to clean up at static destruction time
     struct ProtobufStaticShutdown
     {
-        ~ProtobufStaticShutdown() 
+        ~ProtobufStaticShutdown()
         {
             google::protobuf::ShutdownProtobufLibrary();
         }

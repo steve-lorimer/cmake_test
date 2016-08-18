@@ -1,4 +1,4 @@
-message BarMsg
+message FooMsg
 {
     required string s = 1;
 }
