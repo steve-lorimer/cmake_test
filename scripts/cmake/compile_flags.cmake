@@ -49,6 +49,8 @@ add_flag       (-msse2)
 add_flag       (-msse4.2)
 add_flag       (-mfpmath=sse)
 add_flag       (-ftemplate-depth-128)
+add_flag       (-Wno-unused-parameter)
+add_flag       (-pthread)
 add_linker_flag(-m64)
 add_linker_flag(-rdynamic)                 # required for backtrace
 
@@ -79,9 +81,65 @@ add_release_flag(-fno-builtin-free)
 ##########################################################################
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message(STATUS "${CMAKE_BUILD_TYPE} build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_DEBUG}")    
-    message(STATUS "${CMAKE_BUILD_TYPE} build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_DEBUG}")    
+    message(STATUS "${CMAKE_BUILD_TYPE} build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_DEBUG}")
+    message(STATUS "${CMAKE_BUILD_TYPE} build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 else()
-    message(STATUS "${CMAKE_BUILD_TYPE} build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_RELEASE}")    
-    message(STATUS "${CMAKE_BUILD_TYPE} build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_RELEASE}")    
+    message(STATUS "${CMAKE_BUILD_TYPE} build: CXX_FLAGS:${CMAKE_CXX_FLAGS}${CMAKE_CXX_FLAGS_RELEASE}")
+    message(STATUS "${CMAKE_BUILD_TYPE} build: LINKER_FLAGS:${CMAKE_EXE_LINKER_FLAGS}${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 endif()
+
+############### CFLAGS #############
+
+macro(add_cflag FLAG)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${FLAG}" )
+endmacro()
+
+macro(add_debug_cflag FLAG)
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${FLAG}" )
+endmacro()
+
+macro(add_release_cflag FLAG)
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${FLAG}" )
+endmacro()
+
+set(CMAKE_C_FLAGS "")
+set(CMAKE_C_FLAGS_DEBUG "")
+set(CMAKE_C_FLAGS_RELEASE "")
+
+##########################################################################
+# global
+##########################################################################
+
+add_cflag       (-Werror)
+add_cflag       (-Wall)
+add_cflag       (-Wextra)
+add_cflag       (-m64)
+add_cflag       (-msse2)
+add_cflag       (-msse4.2)
+add_cflag       (-mfpmath=sse)
+add_cflag       (-Wno-unused-parameter)
+add_cflag       (-pthread)
+
+##########################################################################
+# debug mode
+##########################################################################
+
+add_debug_cflag(-g)
+add_debug_cflag(-ggdb3)
+add_debug_cflag(-O0)
+add_debug_cflag(-fno-inline)
+
+##########################################################################
+# release mode
+##########################################################################
+
+add_release_cflag(-ggdb1)
+add_release_cflag(-DNDEBUG)
+add_release_cflag(-O3)
+add_release_cflag(-funroll-loops)
+add_release_cflag(-fdevirtualize)
+add_release_cflag(-finline-functions)
+add_release_cflag(-fno-builtin-malloc)
+add_release_cflag(-fno-builtin-calloc)
+add_release_cflag(-fno-builtin-realloc)
+add_release_cflag(-fno-builtin-free)

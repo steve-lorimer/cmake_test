@@ -1,37 +1,38 @@
 include_guard(__included_bin)
-
 include(module)
 include(install)
 
 function(bin)
-    # - creates a binary 
+    # - creates a binary
     # - optionally adds the binary to 'module' target
-    # - optionally installs the binary
-    # - optionally installs a tagged binary
+    # - optionally installs the binary to <src_location>/<build_variant>/<install_name>
+    # - optionally installs a tagged binary to <src_location>/<build_variant>/<install_name>.tag
     #
     # arguments:
     # NAME    bin_name
+    # INSTALL install_name
+    # MODULE  module
     # SRCS    sources*
     # PROTO   protobuf files*
     # LIBS    libraries*
     # DEPS    dependencies*
-    # MODULE  module
-    # INSTALL 
     # TAG
 
     # parse arguments
-    set(options INSTALL TAG)
-    set(values  NAME MODULE)
+    set(options TAG)
+    set(values  NAME MODULE INSTALL)
     set(lists   SRCS PROTO LIBS DEPS)
     cmake_parse_arguments(BIN "${options}" "${values}" "${lists}" "${ARGN}")
- 
+
     if (DEBUG_CMAKE)
-        message(STATUS "BIN: NAME=${BIN_NAME} MODULE=${BIN_MODULE} PROTO=${BIN_PROTO} LIBS=${BIN_LIBS} DEPS=${BIN_DEPS} INSTALL=${BIN_INSTALL} TAG=${BIN_TAG}")
+        message(STATUS "BIN: NAME=${BIN_NAME} MODULE=${BIN_MODULE} PROTO=${BIN_PROTO} LIBS=${BIN_LIBS} DEPS=${BIN_DEPS} INSTALL=${BIN_INSTALL} TAG=${BIN_TAG} SRCS=${BIN_SRCS}")
     endif()
+
+    # include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
     # generate protobuf files if required
     if (BIN_PROTO)
-        protobuf_generate_cpp(
+        protoc(
             PROTO_SRCS
             PROTO_HDRS
                 ${BIN_PROTO}
@@ -46,24 +47,14 @@ function(bin)
 
     add_executable(${BIN_NAME} ${BIN_SRCS} ${PROTO_SRCS})
 
-    target_link_libraries(${BIN_NAME} 
-            ${BIN_LIBS} 
+    target_link_libraries(${BIN_NAME}
+            ${BIN_LIBS}
+        optimized
             pthread
             rt
-        optimized 
             ${TCMALLOC}
-            ${PROTO_LIBS}
-            )
-
-    # in case we get linking problems that are too finicky to solve
-    # target_link_libraries(${BIN_NAME} 
-    #     -Wl,--start-group 
-    #             ${BIN_LIBS} 
-    #             pthread 
-    #         optimized 
-    #             tcmalloc_minimal.a 
-    #     -Wl,--end-group
-    #     )
+            ${PROTOBUF}
+        )
 
     if(BIN_DEPS)
         add_dependencies (${BIN_NAME} ${BIN_DEPS})
@@ -75,10 +66,12 @@ function(bin)
             set(TAG "TAG")
         endif()
 
+        string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_VARIANT)
+
         install(
-            FILE   ${BIN_NAME}
+            FILE   ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}
             MODULE ${BIN_MODULE}
-            DEST   ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_NAME}
+            DEST   ${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_VARIANT}/${BIN_INSTALL}
             ${TAG}
             )
     endif()
@@ -86,10 +79,12 @@ function(bin)
     # add binary as a dependency of module, so 'make module' will build the binary
     if(BIN_MODULE)
         add_to_module(
-            ${BIN_MODULE} 
+            ${BIN_MODULE}
             ${BIN_NAME}
             )
     endif()
 
-endfunction()
+    # copy the makefile into the source tree to mimic in-source builds
+    configure_file(${CMAKE_SOURCE_DIR}/scripts/cmake/makefile ${CMAKE_CURRENT_SOURCE_DIR}/makefile COPYONLY)
 
+endfunction()

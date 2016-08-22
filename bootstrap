@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for variant in debug release
+do
+    mkdir -p .build/${variant}
+    cd .build/${variant}
+    cmake -Dbuild=${variant} ../..
+    cd -
+done

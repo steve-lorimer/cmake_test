@@ -1,6 +1,6 @@
 include_guard(__included_protoc)
 
-function(protoc SRCS HDRS GEN_PATHS)
+function(protoc SRCS)
 
     set(options)
     set(values    CPP_OUT CWD)
@@ -12,41 +12,39 @@ function(protoc SRCS HDRS GEN_PATHS)
     endif()
 
     if (NOT PROTOC_CWD)
-        set(PROTOC_CWD ${CMAKE_CURRENT_SOURCE_DIR})
+        set(PROTOC_CWD ${CMAKE_SOURCE_DIR})
     endif()
 
     if (NOT PROTOC_INCLUDE)
-        set(PROTOC_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR})
+        set(PROTOC_INCLUDE ${CMAKE_SOURCE_DIR})
     endif()
 
     foreach(PATH ${PROTOC_INCLUDE})
-        list(FIND _protobuf_include_path ${PATH} _contains_already)
+        list(FIND PROTOC_INCLUDE_PATHS ${PATH} _contains_already)
         if(${_contains_already} EQUAL -1)
-                list(APPEND _protobuf_include_path -I ${PATH})
+                list(APPEND PROTOC_INCLUDE_PATHS -I ${PATH})
         endif()
     endforeach()
 
+    # if(DEBUG_CMAKE)
+        message(STATUS "PROTOC: CPP_OUT=${PROTOC_CPP_OUT} CWD=${PROTOC_CWD} INCLUDE=${PROTOC_INCLUDE} PROTO=${PROTOC_PROTO}")
+    # endif()
+
     set(${SRCS})
-    set(${HDRS})
-    set(${GEN_PATHS})
+    set(HDRS)
 
     foreach(FILE ${PROTOC_PROTO})
 
         get_filename_component(ABS_FILE ${FILE} ABSOLUTE)
 
         # convert path of input file into path of output file
-        string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} BIN_DEST ${ABS_FILE})
+        set(BIN_DEST ${ABS_FILE})
 
         get_filename_component(FILE_DEST ${BIN_DEST} DIRECTORY)
         get_filename_component(FILE_WE   ${BIN_DEST} NAME_WE)
 
         list(APPEND ${SRCS} "${FILE_DEST}/${FILE_WE}.pb.cc")
-        list(APPEND ${HDRS} "${FILE_DEST}/${FILE_WE}.pb.h")
-
-        list(FIND GEN_PATHS ${FILE_DEST} _contains_already)
-        if(${_contains_already} EQUAL -1)
-                list(APPEND GEN_PATHS ${FILE_DEST})
-        endif()
+        list(APPEND HDRS    "${FILE_DEST}/${FILE_WE}.pb.h")
 
         add_custom_command(
             OUTPUT
@@ -55,7 +53,7 @@ function(protoc SRCS HDRS GEN_PATHS)
             COMMAND
                 ${PROTOBUF_PROTOC_EXECUTABLE}
             ARGS
-                --cpp_out ${PROTOC_CPP_OUT} ${_protobuf_include_path} ${ABS_FILE}
+                --cpp_out ${PROTOC_CPP_OUT} ${PROTOC_INCLUDE_PATHS} ${ABS_FILE}
             WORKING_DIRECTORY
                 ${PROTOC_CWD}
             DEPENDS
@@ -67,10 +65,21 @@ function(protoc SRCS HDRS GEN_PATHS)
             )
     endforeach()
 
-    set_source_files_properties(${${SRCS}} ${${HDRS}} PROPERTIES GENERATED TRUE)
+    set_source_files_properties(${${SRCS}} ${HDRS} PROPERTIES GENERATED TRUE)
 
-    set(${SRCS}      ${${SRCS}} PARENT_SCOPE)
-    set(${HDRS}      ${${HDRS}} PARENT_SCOPE)
-    set(${GEN_PATHS} ${${GEN_PATHS}} PARENT_SCOPE)
+    # if(DEBUG_CMAKE)
+        message(STATUS "PROTOC: SRCS=${${SRCS}} HDRS=${HDRS}")
+    # endif()
+
+    set(${SRCS} ${${SRCS}} PARENT_SCOPE)
 
 endfunction()
+
+find_program(PROTOBUF_PROTOC_EXECUTABLE
+    NAMES protoc
+    DOC "The Google Protocol Buffers Compiler"
+    PATHS
+    ${PROTOBUF_SRC_ROOT_FOLDER}/vsprojects/${_PROTOBUF_ARCH_DIR}Release
+    ${PROTOBUF_SRC_ROOT_FOLDER}/vsprojects/${_PROTOBUF_ARCH_DIR}Debug
+)
+mark_as_advanced(PROTOBUF_PROTOC_EXECUTABLE)

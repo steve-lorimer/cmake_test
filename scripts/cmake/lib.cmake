@@ -1,4 +1,5 @@
 include_guard(__included_lib)
+include(module)
 
 function(lib)
     # - creates a library
@@ -15,15 +16,15 @@ function(lib)
     # parse arguments
     set(options STATIC SHARED)
     set(values  NAME MODULE)
-    set(lists   SRCS PROTO LIBS)
+    set(lists   SRCS PROTO LIBS MOC RES UI)
     cmake_parse_arguments(LIB "${options}" "${values}" "${lists}" "${ARGN}")
 
-    if (DEBUG_CMAKE)
+    # if(DEBUG_CMAKE)
         message(STATUS "LIB: NAME=${LIB_NAME} MODULE=${LIB_MODULE} PROTO=${LIB_PROTO} LIBS=${LIB_LIBS} DEPS=${LIB_DEPS} SRCS=${LIB_SRCS}")
-    endif()
+    # endif()
 
     # link type
-    if (LIB_SHARED)
+    if(LIB_SHARED)
         set(LINK SHARED)
     else()
         set(LINK STATIC) # default to STATIC if nothing is specified
@@ -31,9 +32,9 @@ function(lib)
 
     # generate protobuf files if required
     if (LIB_PROTO)
-        protobuf_generate_cpp(
+        protoc(
             PROTO_SRCS
-            PROTO_HDRS
+            PROTO
                 ${LIB_PROTO}
             )
 
@@ -44,15 +45,42 @@ function(lib)
         include_directories(${CMAKE_CURRENT_BINARY_DIR})
     endif()
 
-    add_library          (${LIB_NAME} ${LINK} ${LIB_SRCS} ${PROTO_SRCS})
+    if(NOT NO_GUI)
+        # qt specific helpers
+        if(LIB_MOC)
+            qt5_wrap_cpp(LIB_MOC_OUT ${LIB_MOC})
+        endif()
+
+        if(LIB_RES)
+            qt5_add_resources(LIB_RES_OUT ${LIB_RES})
+        endif()
+
+        if(LIB_UI)
+            qt5_wrap_ui(LIB_UI_OUT ${LIB_UI})
+        endif()
+    endif()
+
+
+    add_library(
+            ${LIB_NAME} 
+            ${LINK} 
+            ${LIB_SRCS} ${PROTO_SRCS} ${LIB_MOC_OUT} ${LIB_RES_OUT} ${LIB_UI_OUT}
+            )
+    
+    # target_include_directories(${LIB_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+
     target_link_libraries(${LIB_NAME} ${LIB_LIBS} ${PROTO_LIBS})
 
     # add lib as a dependency of module, so 'make module' will build the lib
-    if (LIB_MODULE)
+    if(LIB_MODULE)
         add_to_module(
             ${LIB_MODULE}
             ${LIB_NAME}
             )
     endif()
 
+    # copy the makefile into the source tree to mimic in-source builds
+    configure_file(${CMAKE_SOURCE_DIR}/scripts/cmake/makefile ${CMAKE_CURRENT_SOURCE_DIR}/makefile COPYONLY)
+
 endfunction()
+
