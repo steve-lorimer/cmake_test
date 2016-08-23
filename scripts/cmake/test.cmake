@@ -10,10 +10,12 @@ function(test)
     # - optionally adds the tests to 'module' target
     #
     # arguments:
-    # NAME   test_name
-    # SRCS   sources*
-    # LIBS   dependencies*
-    # MODULE module
+    # NAME         [test_name]
+    # SRCS         [sources*]
+    # LIBS         [dependencies*]
+    # MODULE       [module]
+    # SUPPRESSIONS [filename] filename in current directory for suppressions
+    # NO_VALGRIND  don't run the test through valgrind
 
     # parse arguments
     set(options NO_VALGRIND)
@@ -32,26 +34,33 @@ function(test)
             ${PROTOBUF}
         )
 
-
-    # make tests run through valgrind
-    set(VALGRIND_BIN  "valgrind")
-    set(VALGRIND_OPTS "--leak-check=full --track-origins=yes --error-exitcode=1 --quiet")
-
-    if (TEST_SUPPRESSIONS)
-        set(VALGRIND_OPTS "${VALGRIND_OPTS} --suppressions=${CMAKE_CURRENT_SOURCE_DIR}/${TEST_SUPPRESSIONS}")
-    endif()
-
+    # make tests run through valgrind by default
     if (NOT TEST_NO_VALGRIND)
+        set(VALGRIND_BIN  "valgrind")
+        set(VALGRIND_OPTS "--leak-check=full --track-origins=yes --error-exitcode=1 --quiet")
+
+        if (TEST_SUPPRESSIONS)
+            set(VALGRIND_OPTS "${VALGRIND_OPTS} --suppressions=${CMAKE_CURRENT_SOURCE_DIR}/${TEST_SUPPRESSIONS}")
+          endif()
+
         set(VALGRIND_CMD "${VALGRIND_BIN} ${VALGRIND_OPTS}")
         separate_arguments(VALGRIND_CMD)
     endif()
 
+    # add the test to ctest
+    add_test(
+        NAME    ${TEST_NAME}
+        COMMAND ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}>
+        )
+
     # create test.passed module which runs this test through cmake and creates a sentinel file if it passes
     add_custom_command(
         OUTPUT  ${TEST_NAME}.passed
-        COMMAND ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}> &> ${TEST_NAME}.output || cat ${TEST_NAME}.output
+        COMMAND ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}> > ${TEST_NAME}.output 2>&1 || (cat ${TEST_NAME}.output && false)
         COMMAND ${CMAKE_COMMAND} -E touch ${TEST_NAME}.passed
+        COMMENT "Running ${TEST_NAME} tests"
         DEPENDS ${TEST_NAME}
+        USES_TERMINAL
         )
 
     # create test.run module which depends on test.passed

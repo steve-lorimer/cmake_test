@@ -15,3 +15,6 @@ bin
 *.a
 makefile
 .build
+*.pb.cc
+*.pb.h
+Testing/

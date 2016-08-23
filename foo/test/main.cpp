@@ -5,6 +5,8 @@
 
 BOOST_AUTO_TEST_CASE(foo_test)
 {
+    std::cout << "testing foo\n";
+
     FooT f = foo();
 
     BOOST_REQUIRE_EQUAL(f.size(), 3);

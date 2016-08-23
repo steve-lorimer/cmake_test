@@ -8,7 +8,7 @@ function(protoc SRCS)
     cmake_parse_arguments(PROTOC "${options}" "${values}" "${lists}" "${ARGN}")
 
     if (NOT PROTOC_CPP_OUT)
-        set(PROTOC_CPP_OUT ${CMAKE_CURRENT_SOURCE_DIR})
+        set(PROTOC_CPP_OUT ${CMAKE_SOURCE_DIR})
     endif()
 
     if (NOT PROTOC_CWD)
@@ -42,6 +42,10 @@ function(protoc SRCS)
 
         get_filename_component(FILE_DEST ${BIN_DEST} DIRECTORY)
         get_filename_component(FILE_WE   ${BIN_DEST} NAME_WE)
+
+        message(STATUS "FILE_DEST: ${FILE_DEST}")
+        message(STATUS "FILE_WE: ${FILE_WE}")
+        message(STATUS "SRC: ${FILE_DEST}/${FILE_WE}.pb.cc")
 
         list(APPEND ${SRCS} "${FILE_DEST}/${FILE_WE}.pb.cc")
         list(APPEND HDRS    "${FILE_DEST}/${FILE_WE}.pb.h")
