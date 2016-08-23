@@ -1,5 +1,5 @@
 lib(
-    NAME   libfoo
+    NAME   foo_lib
     STATIC
     MODULE foo
     SRCS   foo.cpp

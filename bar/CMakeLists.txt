@@ -1,6 +1,6 @@
 lib(
     NAME
-        libbar
+        bar_lib
     STATIC
     MODULE
         bar
@@ -9,7 +9,7 @@ lib(
     PROTO
         bar_msg.proto
     LIBS
-        libfoo
+        foo_lib
     )
 
 add_subdirectory(test)

@@ -10,7 +10,7 @@ qt_bin(
      RES
          resources.qrc
 
-    LIBS libbar
+    LIBS bar_lib
 
     INSTALL TAG
     )

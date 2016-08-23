@@ -10,7 +10,7 @@ bin(
         version.cpp
 
     LIBS 
-        libbar
+        bar_lib
         ${Boost_PROGRAM_OPTIONS_LIBRARY}
 
     DEPS
