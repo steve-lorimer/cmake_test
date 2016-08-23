@@ -1,40 +1,20 @@
 #!/bin/bash
 
-find_local_files()
-{
-    local dir=$1
-    local files=$(find ${dir} -maxdepth 1 -type l)
-        
-    echo ${files}
-}
-
-find_tagged_file()
-{
-    local dir=$1
-    local regexp=$2
-    
-    local files=$(find_local_files ${dir})
-    
-    for file in ${files}; do
-        local found="${found} $(echo ${file} | egrep ${regexp})"
-    done
-    
-    echo ${found}
-}
-
 remove_tagged_files()
 {
     local path=$1
     
     local dir=$(dirname ${path})
     local filename=$(basename ${path})
-       
-    local regexp=${filename}.*[0-9]+\(\.dirty\)\{0,1\}\(\.gz\)\{0,1\}$
-    
-    local found=$(find_tagged_file ${dir} ${regexp})
-    
-    if [ "${found}" != "" ]; then
-         rm ${found}
+
+    # filename (.branch.) num_commits (.build_variant) (.dirty) (.gz)
+    local regexp=${filename}.*[0-9]+\(\.[a-z]*\)\{0,1\}\(\.dirty\)\{0,1\}\(\.gz\)\{0,1\}$
+
+    # find local files which match the regular expression
+    local files=$(find ${dir} -maxdepth 1 -type f | egrep ${regexp})
+
+    if [ "${files}" != "" ]; then
+        rm ${files}
     fi
 }
 
