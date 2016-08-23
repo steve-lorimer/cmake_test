@@ -45,9 +45,12 @@ project proj
     <find-shared-library>pthread
 ;
 
+use-project /ext : 3rd-party ;
+
 use-project /proj/foo  : foo ;
 use-project /proj/bar  : bar ;
 
+build-project 3rd-party ;
 build-project foo ;
 build-project bar ;
 build-project app ;

@@ -1,5 +1,9 @@
 lib foo
-:    [ glob *.cpp ]
+:    [ glob *.cpp *.cc ]
+     /ext/eastl//eastl
+:
+:
+: <find-static-library>protobuf
 ;
 
 build-project test ;

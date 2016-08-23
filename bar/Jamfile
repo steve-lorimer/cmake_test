@@ -1,6 +1,9 @@
 lib bar
-:   [ glob *.cpp ]
+:   [ glob *.cpp *.cc ]
     /proj/foo//foo
+:
+:
+: <find-static-library>protobuf
 ;
 
 build-project test ;
