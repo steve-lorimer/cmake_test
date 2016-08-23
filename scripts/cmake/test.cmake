@@ -1,5 +1,6 @@
 include_guard(__included_test)
 include(module)
+include(install_makefile)
 
 enable_testing()
 
@@ -75,6 +76,8 @@ function(test)
             ${TEST_MODULE}
             ${TEST_NAME}.run
             )
-    endif()
+        endif()
+
+    install_makefile()
 
 endfunction()

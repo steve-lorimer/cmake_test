@@ -1,6 +1,7 @@
 include_guard(__included_bin)
 include(module)
 include(install)
+include(install_makefile)
 
 function(bin)
     # - creates a binary
@@ -60,18 +61,21 @@ function(bin)
         add_dependencies (${BIN_NAME} ${BIN_DEPS})
     endif()
 
+    message(STATUS "----- install -----")
+
     # install the binary, and optionally a tagged binary, if requested
     if(BIN_INSTALL)
+
+      message(STATUS "install")
+
         if(BIN_TAG)
             set(TAG "TAG")
         endif()
 
-        string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_VARIANT)
-
         install(
             FILE   ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}
             MODULE ${BIN_MODULE}
-            DEST   ${CMAKE_CURRENT_SOURCE_DIR}/${BUILD_VARIANT}/${BIN_INSTALL}
+            DEST   ${CMAKE_CURRENT_SOURCE_DIR}/${BIN_INSTALL}
             ${TAG}
             )
     endif()
@@ -84,7 +88,6 @@ function(bin)
             )
     endif()
 
-    # copy the makefile into the source tree to mimic in-source builds
-    configure_file(${CMAKE_SOURCE_DIR}/scripts/cmake/makefile ${CMAKE_CURRENT_SOURCE_DIR}/makefile COPYONLY)
+    install_makefile()
 
 endfunction()

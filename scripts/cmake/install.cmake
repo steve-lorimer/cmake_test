@@ -1,5 +1,4 @@
 include_guard(__included_install)
-
 include(module)
 include(version)
 
@@ -16,6 +15,10 @@ function(install)
     set(lists)
     cmake_parse_arguments(ARG "${options}" "${values}" "${lists}" "${ARGN}")
 
+    # if(DEBUG_CMAKE)
+        message(STATUS "INSTALL: FILE=${ARG_FILE} MODULE=${ARG_MODULE} DEST=${ARG_DEST} TAG=${ARG_TAG}")
+    # endif()
+
     get_filename_component(SRC_FILENAME ${ARG_FILE} NAME_WE)
     get_filename_component(ABS_SRC_FILE ${ARG_FILE} ABSOLUTE)
     get_filename_component(INSTALL_DIR  ${ARG_DEST} DIRECTORY)
@@ -28,11 +31,8 @@ function(install)
         COMMAND 
             ${CMAKE_COMMAND} -E make_directory ${INSTALL_DIR}
 
-        COMMAND 
-            ${CMAKE_COMMAND} -E remove ${ARG_DEST}
-        
-        COMMAND 
-            ${CMAKE_COMMAND} -E create_symlink ${ABS_SRC_FILE} ${ARG_DEST}
+        COMMAND
+            ${CMAKE_COMMAND} -E copy ${ABS_SRC_FILE} ${ARG_DEST}
         
         COMMENT
             "Installing ${SRC_FILENAME}"
@@ -47,6 +47,8 @@ function(install)
     # install a tagged file if requested
     if(ARG_TAG)
 
+        string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_VARIANT)
+
         add_custom_target(
             ${SRC_FILENAME}.tag
 
@@ -56,7 +58,7 @@ function(install)
                 ${CMAKE_COMMAND} -E make_directory ${INSTALL_DIR}
 
             COMMAND 
-                ${BASH_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/install_tagged.sh ${ABS_SRC_FILE} ${ARG_DEST}
+                ${BASH_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/cmake/install_tagged.sh ${ABS_SRC_FILE} ${ARG_DEST} ${BUILD_VARIANT}
             
             DEPENDS 
                 ${ARG_FILE}

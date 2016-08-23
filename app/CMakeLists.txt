@@ -16,5 +16,8 @@ bin(
     DEPS
         version_info
 
-    INSTALL TAG
+    INSTALL
+        app
+
+    TAG
     )

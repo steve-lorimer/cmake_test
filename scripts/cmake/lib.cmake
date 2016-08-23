@@ -1,5 +1,6 @@
 include_guard(__included_lib)
 include(module)
+include(install_makefile)
 
 function(lib)
     # - creates a library
@@ -79,8 +80,7 @@ function(lib)
             )
     endif()
 
-    # copy the makefile into the source tree to mimic in-source builds
-    configure_file(${CMAKE_SOURCE_DIR}/scripts/cmake/makefile ${CMAKE_CURRENT_SOURCE_DIR}/makefile COPYONLY)
+    install_makefile()
 
 endfunction()
 
