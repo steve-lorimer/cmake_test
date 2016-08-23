@@ -19,9 +19,9 @@ function(lib)
     set(lists   SRCS PROTO LIBS MOC RES UI)
     cmake_parse_arguments(LIB "${options}" "${values}" "${lists}" "${ARGN}")
 
-    # if(DEBUG_CMAKE)
+    if(DEBUG_CMAKE)
         message(STATUS "LIB: NAME=${LIB_NAME} MODULE=${LIB_MODULE} PROTO=${LIB_PROTO} LIBS=${LIB_LIBS} DEPS=${LIB_DEPS} SRCS=${LIB_SRCS}")
-    # endif()
+    endif()
 
     # link type
     if(LIB_SHARED)

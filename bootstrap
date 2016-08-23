@@ -2,8 +2,9 @@
 
 for variant in debug release
 do
+    echo "[ Generating ${variant} makefiles ]"
     mkdir -p .build/${variant}
-    cd .build/${variant}
+    pushd .build/${variant} > /dev/null
     cmake -Dbuild=${variant} ../..
-    cd -
+    popd > /dev/null
 done

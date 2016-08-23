@@ -10,7 +10,7 @@ endif()
 
 if (CCACHE_FOUND)
 
-    message (STATUS "using ccache")
+    message (STATUS "Using ccache")
 
     set_property(
         GLOBAL PROPERTY

@@ -26,9 +26,9 @@ function(protoc SRCS)
         endif()
     endforeach()
 
-    # if(DEBUG_CMAKE)
+    if(DEBUG_CMAKE)
         message(STATUS "PROTOC: CPP_OUT=${PROTOC_CPP_OUT} CWD=${PROTOC_CWD} INCLUDE=${PROTOC_INCLUDE} PROTO=${PROTOC_PROTO}")
-    # endif()
+    endif()
 
     set(${SRCS})
     set(HDRS)
@@ -42,10 +42,6 @@ function(protoc SRCS)
 
         get_filename_component(FILE_DEST ${BIN_DEST} DIRECTORY)
         get_filename_component(FILE_WE   ${BIN_DEST} NAME_WE)
-
-        message(STATUS "FILE_DEST: ${FILE_DEST}")
-        message(STATUS "FILE_WE: ${FILE_WE}")
-        message(STATUS "SRC: ${FILE_DEST}/${FILE_WE}.pb.cc")
 
         list(APPEND ${SRCS} "${FILE_DEST}/${FILE_WE}.pb.cc")
         list(APPEND HDRS    "${FILE_DEST}/${FILE_WE}.pb.h")
@@ -71,9 +67,9 @@ function(protoc SRCS)
 
     set_source_files_properties(${${SRCS}} ${HDRS} PROPERTIES GENERATED TRUE)
 
-    # if(DEBUG_CMAKE)
+    if(DEBUG_CMAKE)
         message(STATUS "PROTOC: SRCS=${${SRCS}} HDRS=${HDRS}")
-    # endif()
+    endif()
 
     set(${SRCS} ${${SRCS}} PARENT_SCOPE)
 
