@@ -2,7 +2,7 @@ find_package(Boost COMPONENTS program_options REQUIRED)
 
 bin(
     NAME 
-        app
+        app_bin
     
     SRCS 
         main.cpp
@@ -15,6 +15,9 @@ bin(
 
     DEPS
         version_info
+
+    MODULE
+        app
 
     INSTALL
         app
