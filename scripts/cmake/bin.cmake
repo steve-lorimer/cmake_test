@@ -61,12 +61,8 @@ function(bin)
         add_dependencies (${BIN_NAME} ${BIN_DEPS})
     endif()
 
-    message(STATUS "----- install -----")
-
     # install the binary, and optionally a tagged binary, if requested
     if(BIN_INSTALL)
-
-      message(STATUS "install")
 
         if(BIN_TAG)
             set(TAG "TAG")

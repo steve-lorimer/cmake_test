@@ -15,9 +15,9 @@ function(install)
     set(lists)
     cmake_parse_arguments(ARG "${options}" "${values}" "${lists}" "${ARGN}")
 
-    # if(DEBUG_CMAKE)
+    if(DEBUG_CMAKE)
         message(STATUS "INSTALL: FILE=${ARG_FILE} MODULE=${ARG_MODULE} DEST=${ARG_DEST} TAG=${ARG_TAG}")
-    # endif()
+    endif()
 
     get_filename_component(SRC_FILENAME ${ARG_FILE} NAME_WE)
     get_filename_component(ABS_SRC_FILE ${ARG_FILE} ABSOLUTE)
