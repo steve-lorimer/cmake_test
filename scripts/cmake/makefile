@@ -28,7 +28,7 @@ endif
 
 # if no build has been specified, then we will build the default build
 ifeq "$(build)" ""
-	build:=$(default_build)
+    build:=$(default_build)
 endif
 
 building := $(if $(filter $(build_variants),$(build)),1,0)
@@ -48,7 +48,8 @@ endef
 
 project_root := $(strip $(call find_project_root,$(shell pwd)))
 build_stem := $(subst $(project_root),,$(shell pwd))
-build_dir := $(project_root)/.build/$(build)$(build_stem)
+build_root := $(project_root)/.build/$(build)
+build_dir := $(build_root)$(build_stem)
 
 #-----------------------------------------
 
@@ -58,10 +59,7 @@ all:
 	@$(MAKE) --no-print-directory -C $(build_dir) $(MAKEFLAGS)
 
 $(target):
-	@$(MAKE) --no-print-directory -C $(build_dir) $(target) $(MAKEFLAGS)
+	@$(MAKE) --no-print-directory -C $(build_root) $(target) $(MAKEFLAGS)
 
-debug: $(if $(target),,all)
-	@echo . > /dev/null # rule which does nothing; suppresses "Nothing to be done for target"
-
-release: $(if $(target),,all)
-	@echo . > /dev/null # rule which does nothing; suppresses "Nothing to be done for target"
+$(build): $(if $(target),,all)
+	@touch /dev/null # rule which does nothing; suppresses "Nothing to be done for target"
