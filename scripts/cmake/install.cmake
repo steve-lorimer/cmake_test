@@ -15,9 +15,9 @@ function(install)
     set(lists)
     cmake_parse_arguments(ARG "${options}" "${values}" "${lists}" "${ARGN}")
 
-    # if(DEBUG_CMAKE)
+    if(DEBUG_CMAKE)
         message(STATUS "INSTALL: FILE=${ARG_FILE} MODULE=${ARG_MODULE} DEST=${ARG_DEST} TAG=${ARG_TAG}")
-    # endif()
+    endif()
 
     get_filename_component(SRC_FILENAME ${ARG_FILE} NAME_WE)
     get_filename_component(ABS_SRC_FILE ${ARG_FILE} ABSOLUTE)
@@ -47,22 +47,22 @@ function(install)
     # install a tagged file if requested
     if(ARG_TAG)
 
-        string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_VARIANT)
-
         add_custom_target(
             ${SRC_FILENAME}.tag
 
             ALL
-           
-            COMMAND 
-                ${CMAKE_COMMAND} -E make_directory ${INSTALL_DIR}
 
-            COMMAND 
-                ${BASH_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/cmake/install_tagged.sh ${ABS_SRC_FILE} ${ARG_DEST} ${BUILD_VARIANT}
-            
-            DEPENDS 
+            COMMAND
+                ${CMAKE_COMMAND}
+                    -DSRC_FILE=${ABS_SRC_FILE}
+                    -DDEST_FILE=${ARG_DEST}
+                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                    -DCMAKE_MODULE_PATH="${CMAKE_SOURCE_DIR}/scripts/cmake"
+                    -P ${CMAKE_SOURCE_DIR}/scripts/cmake/install_tagged.cmake
+
+            DEPENDS
                 ${ARG_FILE}
-            )
+        )
 
         set(INSTALLED_TARGETS "${INSTALLED_TARGETS} ${SRC_FILENAME}.tag")
     endif()
@@ -71,7 +71,7 @@ function(install)
     set_directory_properties(
         PROPERTIES
         ADDITIONAL_MAKE_CLEAN_FILES
-        ${INSTALL_DIR})
+        ${INSTALL_DIR}/${ABS_SRC_FILE}.[0-9]*)
 
     # required for add_custom_target
     separate_arguments(INSTALLED_TARGETS)

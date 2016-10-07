@@ -1,6 +1,7 @@
 include(include_guard)
 include_guard(__included_all)
 
+include(color)
 include(settings)
 include(ccache)
 include(compile_flags)
