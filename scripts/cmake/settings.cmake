@@ -1,11 +1,8 @@
 include_guard(__included_settings)
 
-#set(DEBUG_CMAKE "TRUE")
+# set(DEBUG_CMAKE "TRUE")
 #set(NO_CCACHE "TRUE")
 
-if(EXISTS "/etc/redhat-release")
-
-    message(STATUS "Building on CentOs - disabling GUI")
-
-    set(NO_GUI "Y")
-endif()
+# we set the -rdynamic compiler flag, which exports all our symbols, because we use backtrace
+# to log a stack trace when we dump core. This variable suppresses a warning about this behaviour
+set(CMAKE_ENABLE_EXPORTS true)

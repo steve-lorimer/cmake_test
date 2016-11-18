@@ -21,8 +21,8 @@ function(do_find_lib LIB_NAME SUFFIX OUT)
         FOUND_${LIB_NAME}${SUFFIX} 
         ${LIB_NAME}
         PATHS
-            ${FIND_PATHS}
-        )
+        ${FIND_PATHS}
+          )
 
     if(NOT FOUND_${LIB_NAME}${SUFFIX})
         message(SEND_ERROR "unable to find library ${LIB_NAME}")

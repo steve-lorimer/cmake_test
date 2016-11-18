@@ -11,12 +11,12 @@ function(module MODULE)
 
 endfunction()
 
-function(add_to_module MODULE DEPENDENCY)
+function(add_to_module PARENT DEPENDENCY)
  
-    module(${MODULE})
+    module(${PARENT})
 
-    # add the dependency to be built when MODULE is built
-    add_dependencies(${MODULE}
+    # add the dependency to be built when PARENT is built
+    add_dependencies(${PARENT}
         ${DEPENDENCY}
         )
 

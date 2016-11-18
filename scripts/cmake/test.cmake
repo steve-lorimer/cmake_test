@@ -1,6 +1,6 @@
 include_guard(__included_test)
 include(module)
-include(install_makefile)
+include(bin)
 
 enable_testing()
 
@@ -12,72 +12,121 @@ function(test)
     #
     # arguments:
     # NAME         [test_name]
+    # ARGS         [test args*]
     # SRCS         [sources*]
+    # PROTO        [protobuf files*]
     # LIBS         [dependencies*]
     # MODULE       [module]
     # SUPPRESSIONS [filename] filename in current directory for suppressions
     # NO_VALGRIND  don't run the test through valgrind
 
     # parse arguments
-    set(options NO_VALGRIND)
-    set(values NAME MODULE SUPPRESSIONS)
-    set(lists  SRCS LIBS)
-    cmake_parse_arguments(TEST "${options}" "${values}" "${lists}" "${ARGN}")
+    set(options NO_VALGRIND SUPPRESS_NO_VALGRIND_WARNING)
+    set(values NAME MODULE SUPPRESSIONS RPATH)
+    set(lists  ARGS SRCS PROTO PROTO_INCLUDES LIBS)
+    cmake_parse_arguments(ARG "${options}" "${values}" "${lists}" "${ARGN}")
+
+    # all tests have a .test suffix added, their name becomes a module to which they are added
+    set(TEST_NAME ${ARG_NAME}.test)
 
     # create the test executable, linked against dependencies and boost-test
-    add_executable       (${TEST_NAME} ${TEST_SRCS})
-    target_link_libraries(${TEST_NAME}
-            ${TEST_LIBS}
-        optimized
+    bin(
+        # pass ARG_NAME to bin, but specify SUFFIX=test, so the binary target matches TEST_NAME
+        NAME
+            ${ARG_NAME}
+        SUFFIX
+            test
+
+        MODULE
+            ${ARG_MODULE}
+
+        SRCS
+            ${ARG_SRCS}
+
+        PROTO
+            ${ARG_PROTO}
+
+        PROTO_INCLUDES
+            ${ARG_PROTO_INCLUDES}
+
+        LIBS 
+            ${ARG_LIBS}
             ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-            pthread
-            rt
-            ${PROTOBUF}
+
+        RPATH
+            ${ARG_RPATH}
         )
 
     # make tests run through valgrind by default
-    if (NOT TEST_NO_VALGRIND)
+    if (NOT ARG_NO_VALGRIND)
         set(VALGRIND_BIN  "valgrind")
         set(VALGRIND_OPTS "--leak-check=full --track-origins=yes --error-exitcode=1 --quiet")
 
-        if (TEST_SUPPRESSIONS)
-            set(VALGRIND_OPTS "${VALGRIND_OPTS} --suppressions=${CMAKE_CURRENT_SOURCE_DIR}/${TEST_SUPPRESSIONS}")
-          endif()
+        if (ARG_SUPPRESSIONS)
+            set(VALGRIND_OPTS "${VALGRIND_OPTS} --suppressions=${CMAKE_CURRENT_SOURCE_DIR}/${ARG_SUPPRESSIONS}")
+        endif()
 
         set(VALGRIND_CMD "${VALGRIND_BIN} ${VALGRIND_OPTS}")
         separate_arguments(VALGRIND_CMD)
+    elseif(NOT ARG_SUPPRESS_NO_VALGRIND_WARNING)
+        message(REVIEW "${TEST_NAME} will not run through valgrind")
     endif()
 
     # add the test to ctest
     add_test(
-        NAME    ${TEST_NAME}
-        COMMAND ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}>
+        NAME
+            ${TEST_NAME}
+
+        COMMAND
+            ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}> ${ARG_ARGS}
+
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_SOURCE_DIR}
         )
 
-    # create test.passed module which runs this test through cmake and creates a sentinel file if it passes
+    set(OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${ARG_NAME}.output)
+    set(PASSED_FILE ${CMAKE_CURRENT_BINARY_DIR}/${ARG_NAME}.passed)
+
+    # create test.passed command which runs this test and creates a sentinel file if it passes
     add_custom_command(
-        OUTPUT  ${TEST_NAME}.passed
-        COMMAND ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}> > ${TEST_NAME}.output 2>&1 || (cat ${TEST_NAME}.output && false)
-        COMMAND ${CMAKE_COMMAND} -E touch ${TEST_NAME}.passed
-        COMMENT "Running ${TEST_NAME} tests"
-        DEPENDS ${TEST_NAME}
+        OUTPUT
+            ${PASSED_FILE}
+
+        WORKING_DIRECTORY
+            ${CMAKE_CURRENT_SOURCE_DIR}
+
+        COMMAND
+            echo "\"${VALGRIND_BIN} ${VALGRIND_OPTS} $<TARGET_FILE:${TEST_NAME}> --report_level=detailed -- ${ARG_ARGS}\"" > ${OUTPUT_FILE}
+
+        COMMAND
+            echo "-----------------------------" >> ${OUTPUT_FILE}
+
+        COMMAND
+            # the FastClock init often fails under valgrind so disable the exception
+            export "SUPPRESS_VIV_FASTCLOCK_INIT_FAILURE=1" && ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}> --report_level=detailed -- ${ARG_ARGS} >> ${OUTPUT_FILE} 2>&1 || (cat ${OUTPUT_FILE} && false)
+
+        COMMAND
+            ${CMAKE_COMMAND} -E touch ${PASSED_FILE}
+
+        COMMENT
+            "Running ${ARG_NAME} tests"
+
+        DEPENDS
+            ${TEST_NAME}
+
         USES_TERMINAL
         )
 
-    # create test.run module which depends on test.passed
-    add_custom_target(${TEST_NAME}.run
+    # create test.run target which depends on test.passed
+    add_custom_target(${ARG_NAME}.run
         ALL
-        DEPENDS ${TEST_NAME}.passed
+        DEPENDS ${PASSED_FILE}
         )
 
-    # add test.run as a dependency of module, so 'make module' will build and run the tests
-    if(TEST_MODULE)
-        add_to_module(
-            ${TEST_MODULE}
-            ${TEST_NAME}.run
-            )
-        endif()
-
-    install_makefile()
+    # add the test.run command as a dependency of module, so 'make module' will build and run the test
+    add_to_module(
+        ${ARG_NAME}
+        ${ARG_NAME}.run
+        )
 
 endfunction()

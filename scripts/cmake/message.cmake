@@ -1,4 +1,5 @@
-#include_guard(__included_color)
+include(include_guard)
+include_guard(__included_message)
 
 if(NOT WIN32)
     string(ASCII 27 Esc)
@@ -21,10 +22,10 @@ if(NOT WIN32)
 endif()
 
 function(message)
-    # FATAL_ERROR / SEND_ERROR: red
-    # WARNING                 : yellow
-    # AUTHOR_WARNING          : cyan
-    # STATUS                  : green
+    # FATAL_ERROR / SEND_ERROR : red
+    # WARNING                    : yellow
+    # AUTHOR_WARNING           : cyan
+    # STATUS                   : green
 
     set(ALL_ARGS ${ARGV})
     list(GET ARGV 0 MSG_TYPE)
@@ -45,6 +46,18 @@ function(message)
     elseif(MSG_TYPE STREQUAL STATUS)
 
         _message(${MSG_TYPE} "${bold_blue}${ARGV}${col_reset}")
+
+    elseif(MSG_TYPE STREQUAL REVIEW)
+
+        _message("${red}${ARGV}${col_reset}")
+
+    elseif(MSG_TYPE STREQUAL INFO)
+
+        _message("${bold_magenta}${ARGV}${col_reset}")
+
+    elseif(MSG_TYPE STREQUAL TRACE)
+
+        _message("${cyan}${ARGV}${col_reset}")
 
     else()
 

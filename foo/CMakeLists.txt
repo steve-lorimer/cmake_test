@@ -1,10 +1,9 @@
 lib(
-    NAME   foo_lib
+    NAME   foo
     STATIC
-    MODULE foo
     SRCS   foo.cpp
     PROTO  foo_msg.proto
-    LIBS   eastl
+    LIBS   eastl.lib
     )
 
 add_subdirectory(test)

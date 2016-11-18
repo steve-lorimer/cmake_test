@@ -1,4 +1,4 @@
-include(color)
+include(message)
 
 if(NOT SRC_FILE)
     message(FATAL_ERROR "no input file specified")
@@ -60,22 +60,28 @@ endif()
 
 file(GLOB EXISTING_TAGGED_FILES ${DEST_FILE}.[0-9]*)
 
-set(INSTALL_FILE ${DEST_FILE}.${COMMITS}${BRANCH}${BUILD}${DIRTY})
+set(TAGGED_DEST_FILE ${DEST_FILE}.${COMMITS}${BRANCH}${BUILD}${DIRTY})
 
-if(NOT EXISTING_TAGGED_FILES STREQUAL INSTALL_FILE)
+# don't reinstall if there is only 1 tagged file there, it's name matches, and it's newer than the source file
+if(NOT EXISTING_TAGGED_FILES STREQUAL TAGGED_DEST_FILE OR ${SRC_FILE} IS_NEWER_THAN ${TAGGED_DEST_FILE})
+
     if (EXISTING_TAGGED_FILES)
-      execute_process(
-        COMMAND
-            ${CMAKE_COMMAND} -E remove ${EXISTING_TAGGED_FILES}
-        )
+        execute_process(
+            COMMAND
+                ${CMAKE_COMMAND} -E remove ${EXISTING_TAGGED_FILES}
+            )
     endif()
 
-    message(STATUS "installing ${INSTALL_FILE}")
+    message(STATUS "installing ${TAGGED_DEST_FILE}")
 
     execute_process(
-      COMMAND
-          ${CMAKE_COMMAND} -E make_directory ${INSTALL_DIR}
-      COMMAND
-          ${CMAKE_COMMAND} -E copy ${SRC_FILE} ${INSTALL_FILE}
+        COMMAND
+            ${CMAKE_COMMAND} -E make_directory ${INSTALL_DIR}
+
+        COMMAND
+            ${CMAKE_COMMAND} -E copy ${SRC_FILE} ${TAGGED_DEST_FILE}
+
+        COMMAND
+            ${CMAKE_COMMAND} -E touch ${TAGGED_DEST_FILE} # update the timestamp so subsequent installs aren't repeated unnecessarily
       )
 endif()

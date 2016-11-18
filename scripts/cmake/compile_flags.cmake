@@ -50,9 +50,17 @@ add_flag       (-msse4.2)
 add_flag       (-mfpmath=sse)
 add_flag       (-ftemplate-depth-128)
 add_flag       (-Wno-unused-parameter)
+add_flag       (-Wno-maybe-uninitialized) # maybe-uninitialized is imperfect and reports false positives
+#add_flag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
 add_flag       (-pthread)
 add_linker_flag(-m64)
 add_linker_flag(-rdynamic)                 # required for backtrace
+
+# TODO: libtins leaks memory
+# if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 5.1)
+#     add_flag   (-fsanitize=leak)
+#     add_flag   (-fno-omit-frame-pointer)
+# endif()
 
 ##########################################################################
 # debug mode
@@ -118,6 +126,8 @@ add_cflag       (-msse2)
 add_cflag       (-msse4.2)
 add_cflag       (-mfpmath=sse)
 add_cflag       (-Wno-unused-parameter)
+add_cflag       (-Wno-maybe-uninitialized) # maybe-uninitialized is imperfect and reports false positives
+#add_cflag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
 add_cflag       (-pthread)
 
 ##########################################################################

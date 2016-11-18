@@ -1,0 +1,21 @@
+#include "${FILENAME}.h"
+
+/*
+ * Version information
+ *
+ * - This is a generated file - do not edit
+ */
+
+namespace ${PURPOSE} { namespace bin {
+
+const char* version()       { return "${VERSION}"; }
+const char* num_commits()   { return "${NUM_COMMITS}"; }
+const char* date()          { return __DATE__ " "  __TIME__; }
+const char* variant()       { return "${BUILD_VARIANT}"; }
+const char* branch()        { return "${BRANCH}"; }
+const char* ahead_by()      { return "${AHEAD_BY}"; }
+const char* num_untracked() { return "${NUM_UNTRACKED}"; }
+const char* user()          { return "${USER}"; }
+const char* hostname()      { return "${HOSTNAME}"; }
+
+}}

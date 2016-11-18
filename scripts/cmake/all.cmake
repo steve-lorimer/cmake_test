@@ -1,7 +1,8 @@
 include(include_guard)
 include_guard(__included_all)
 
-include(color)
+include(utils)
+include(message)
 include(settings)
 include(ccache)
 include(compile_flags)

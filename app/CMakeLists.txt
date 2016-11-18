@@ -1,8 +1,8 @@
-find_package(Boost COMPONENTS program_options REQUIRED)
+create_version("app" version.cpp)
 
 bin(
     NAME 
-        app_bin
+        app
     
     SRCS 
         main.cpp
@@ -10,17 +10,11 @@ bin(
         version.cpp
 
     LIBS 
-        bar_lib
-        ${Boost_PROGRAM_OPTIONS_LIBRARY}
-
-    DEPS
-        version_info
-
-    MODULE
-        app
-
-    INSTALL
-        app
+        bar.lib
+        ${LIB_BOOST_PROGRAM_OPTIONS}
 
     TAG
     )
+
+# ensure that the version info is generated before we try compile version
+add_dependencies(app.bin version_info.app)

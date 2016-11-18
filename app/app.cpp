@@ -24,15 +24,21 @@ int App::run(int argc, char** argv)
         exit(0);
     }
 
-    if (vm.count("version"))
-    {
-        std::cout << app_version() << std::endl;
-        exit(0);
-    }
+	std::cout <<
+		"build variant : " << app::bin::variant() << '\n' <<
+		"build date    : " << app::bin::date() << '\n' <<
+		"version       : " << app::bin::version() << '\n' <<
+		"num_commits   : " << app::bin::num_commits() << '\n' <<
+		"branch        : " << app::bin::branch() << '\n' <<
+		"ahead_by      : " << app::bin::ahead_by() << '\n' <<
+		"num_untracked : " << app::bin::num_untracked() << '\n' <<
+		"user          : " << app::bin::user() << '\n' <<
+		"hostname      : " << app::bin::hostname() << '\n';
 
-    std::cout << app_version() << '\n'
-              << '\n'
-              << "foo.size: " << foo().size() << '\n'
+	if (vm.count("version"))
+		exit(0);
+
+	std::cout << "foo.size: " << foo().size() << '\n'
               << "bar: "      << bar() << '\n';
     return 0;
 }

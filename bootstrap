@@ -1,10 +1,42 @@
 #!/bin/bash
 
-for variant in debug release
-do
+run_cmake() 
+{
+    if hash cmake3 2>/dev/null; then
+        cmake3 "$@"
+    else
+        cmake "$@"
+    fi
+}
+
+remove_cmake_files()
+{
+    rm -rf CMakeCache.txt
+    rm -rf CMakeFiles
+    rm -rf CMakeScripts
+    rm -rf Makefile
+    rm -rf cmake_install.cmake
+    rm -rf install_manifest.txt
+    rm -rf CTestTestfile.cmake
+}
+
+bootstrap()
+{
+    local variant=$1; shift
+
     echo "[ Generating ${variant} makefiles ]"
+
     mkdir -p .build/${variant}
     pushd .build/${variant} > /dev/null
-    cmake -Dbuild=${variant} ../..
+
+    # remove any cached cmake variables that may exist, so we bootstrap a fresh environment
+    remove_cmake_files 
+
+    # generate the build system
+    run_cmake -Dbuild=${variant} -DCMAKE_EXPORT_COMPILE_COMMANDS=1 "$@" ../..
+
     popd > /dev/null
-done
+}
+
+bootstrap debug "$@"
+bootstrap release "$@"

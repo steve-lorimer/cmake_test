@@ -1,37 +1,17 @@
 include_guard(__included_dependencies)
 include(find_lib)
 
-set(Boost_USE_STATIC_LIBS ON)
+# static libraries
+find_static_lib(boost_unit_test_framework LIB_BOOST_UNIT_TEST_FRAMEWORK)
+find_static_lib(boost_program_options     LIB_BOOST_PROGRAM_OPTIONS)
+find_static_lib(boost_date_time           LIB_BOOST_DATE_TIME)
+find_static_lib(boost_filesystem          LIB_BOOST_FILESYSTEM)
+find_static_lib(boost_thread              LIB_BOOST_THREAD)
+find_static_lib(boost_system              LIB_BOOST_SYSTEM)
+find_static_lib(boost_regex               LIB_BOOST_REGEX)
+find_static_lib(boost_iostreams           LIB_BOOST_IOSTREAMS)
+find_static_lib(protobuf                  LIB_PROTOBUF)
+find_static_lib(tcmalloc_minimal          LIB_TCMALLOC)
 
-find_program(BASH_EXECUTABLE bash REQUIRED)
-
-# boost
-find_package(Boost
-    COMPONENTS
-        unit_test_framework REQUIRED
-        program_options     REQUIRED
-        date_time           REQUIRED
-        filesystem          REQUIRED
-        system              REQUIRED
-        iostreams           REQUIRED)
-
-# qt
-if(NOT NO_GUI)
-    find_package(Qt5Core         REQUIRED)
-    find_package(Qt5Gui          REQUIRED)
-    find_package(Qt5Widgets      REQUIRED)
-    find_package(Qt5Multimedia   REQUIRED)
-    find_package(Qt5PrintSupport REQUIRED)
-    find_package(Qt5Test         REQUIRED)
-else()
-    message(STATUS "Building without GUI support")
-endif()
-
-# protobuf
-# find_package(Protobuf REQUIRED)
-find_static_lib(protobuf PROTOBUF)
-
-# tcmalloc
-find_static_lib(tcmalloc_minimal TCMALLOC)
-
-# protobuf
+# shared libraries
+find_shared_lib(zmq                       LIB_ZMQ_SO)

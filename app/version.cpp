@@ -1,18 +1,21 @@
 #include "version.h"
-#include "version_details.h"
 
-std::string app_version()
-{
-    using namespace std::literals::string_literals;
+/*
+ * Version information
+ *
+ * - This is a generated file - do not edit
+ */
 
-    return "\n version info:"s                      +
-           "\n\t  source version: " + VERSION       +
-           "\n\t  num commits:    " + NUM_COMMITS   +
-           "\n\t  branch:         " + BRANCH        +
-           "\n\t  build variant:  " + BUILD_VARIANT +
-           "\n\t  build date:     " + BUILD_DATE    +
-           "\n\t  ahead by:       " + AHEAD_BY      +
-           "\n\t  user:           " + USER          +
-           "\n\t  hostname:       " + HOSTNAME;
-}
+namespace app { namespace bin {
 
+const char* version()       { return "d060c96-dirty"; }
+const char* num_commits()   { return "70"; }
+const char* date()          { return __DATE__ " "  __TIME__; }
+const char* variant()       { return "debug"; }
+const char* branch()        { return "master"; }
+const char* ahead_by()      { return "0"; }
+const char* num_untracked() { return "0"; }
+const char* user()          { return "steve"; }
+const char* hostname()      { return "ky-steve"; }
+
+}}
