@@ -6,3 +6,7 @@ include_guard(__included_settings)
 # we set the -rdynamic compiler flag, which exports all our symbols, because we use backtrace
 # to log a stack trace when we dump core. This variable suppresses a warning about this behaviour
 set(CMAKE_ENABLE_EXPORTS true)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)

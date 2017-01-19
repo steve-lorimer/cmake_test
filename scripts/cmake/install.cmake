@@ -41,7 +41,7 @@ function(install)
             ${CMAKE_COMMAND} -E make_directory ${INSTALL_DIR}
 
         COMMAND
-            ${CMAKE_COMMAND} -E copy ${ABS_SRC_FILE} ${ARG_DEST}
+            ${CMAKE_COMMAND} -E create_symlink ${ABS_SRC_FILE} ${ARG_DEST}
 
         COMMENT
             "Installing ${SRC_FILENAME}"
@@ -70,6 +70,7 @@ function(install)
                     -DDEST_FILE=${ARG_DEST}
                     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                     -DCMAKE_MODULE_PATH=${CMAKE_SCRIPTS_DIR}
+                    -DINSTALL_TAGGED_AS_COPY=${INSTALL_TAGGED_AS_COPY}
                     -P ${CMAKE_SCRIPTS_DIR}/install_tagged.cmake
 
             DEPENDS
@@ -121,7 +122,7 @@ function(install)
 
         # if we're also installing tagged binaries, make sure a globbing pattern exists in gitignore too
         if (ARG_TAG)
-            set(TAG_PATTERN "${DST_FILENAME}.[0-9]*")
+            set(TAG_PATTERN "${DST_FILENAME}*.[0-9]*")
 
             # search for the destination filename in the gitignore
             if(GITIGNORE)

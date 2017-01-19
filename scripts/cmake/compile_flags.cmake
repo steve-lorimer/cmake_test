@@ -40,7 +40,6 @@ set(CMAKE_EXE_LINKER_FLAGS_RELEASE "")
 # global
 ##########################################################################
 
-add_flag       (-std=c++14)
 add_flag       (-Werror)
 add_flag       (-Wall)
 add_flag       (-Wextra)
@@ -51,8 +50,9 @@ add_flag       (-mfpmath=sse)
 add_flag       (-ftemplate-depth-128)
 add_flag       (-Wno-unused-parameter)
 add_flag       (-Wno-maybe-uninitialized) # maybe-uninitialized is imperfect and reports false positives
-#add_flag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
+add_flag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
 add_flag       (-pthread)
+add_flag       (-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG) # enable nanosecond resolution
 add_linker_flag(-m64)
 add_linker_flag(-rdynamic)                 # required for backtrace
 
@@ -75,7 +75,7 @@ add_debug_flag(-fno-inline)
 # release mode
 ##########################################################################
 
-add_release_flag(-ggdb1)
+add_release_flag(-ggdb2)
 add_release_flag(-DNDEBUG)
 add_release_flag(-O3)
 add_release_flag(-funroll-loops)
@@ -127,7 +127,7 @@ add_cflag       (-msse4.2)
 add_cflag       (-mfpmath=sse)
 add_cflag       (-Wno-unused-parameter)
 add_cflag       (-Wno-maybe-uninitialized) # maybe-uninitialized is imperfect and reports false positives
-#add_cflag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
+add_cflag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
 add_cflag       (-pthread)
 
 ##########################################################################
@@ -143,7 +143,7 @@ add_debug_cflag(-fno-inline)
 # release mode
 ##########################################################################
 
-add_release_cflag(-ggdb1)
+add_release_cflag(-ggdb2)
 add_release_cflag(-DNDEBUG)
 add_release_cflag(-O3)
 add_release_cflag(-funroll-loops)

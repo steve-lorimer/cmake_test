@@ -29,6 +29,15 @@ function(test)
     # all tests have a .test suffix added, their name becomes a module to which they are added
     set(TEST_NAME ${ARG_NAME}.test)
 
+    # since boost 1.60 a unit test executable requires a "--" between the boost
+    # framework args and the args passed to the unit test
+    # boost1.57 doesn't work if that separator is used
+    if(Boost_MINOR_VERSION LESS 60)
+        set(ARGS_SEP)
+    else()
+        set(ARGS_SEP --)
+    endif()
+
     # create the test executable, linked against dependencies and boost-test
     bin(
         # pass ARG_NAME to bin, but specify SUFFIX=test, so the binary target matches TEST_NAME
@@ -96,14 +105,14 @@ function(test)
             ${CMAKE_CURRENT_SOURCE_DIR}
 
         COMMAND
-            echo "\"${VALGRIND_BIN} ${VALGRIND_OPTS} $<TARGET_FILE:${TEST_NAME}> --report_level=detailed -- ${ARG_ARGS}\"" > ${OUTPUT_FILE}
+            echo "\"${VALGRIND_BIN} ${VALGRIND_OPTS} $<TARGET_FILE:${TEST_NAME}> --report_level=detailed ${ARGS_SEP} ${ARG_ARGS}\"" > ${OUTPUT_FILE}
 
         COMMAND
             echo "-----------------------------" >> ${OUTPUT_FILE}
 
         COMMAND
             # the FastClock init often fails under valgrind so disable the exception
-            export "SUPPRESS_VIV_FASTCLOCK_INIT_FAILURE=1" && ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}> --report_level=detailed -- ${ARG_ARGS} >> ${OUTPUT_FILE} 2>&1 || (cat ${OUTPUT_FILE} && false)
+            export "SUPPRESS_VIV_FASTCLOCK_INIT_FAILURE=1" && ${VALGRIND_CMD} $<TARGET_FILE:${TEST_NAME}> --report_level=detailed ${ARGS_SEP} ${ARG_ARGS} >> ${OUTPUT_FILE} 2>&1 || (cat ${OUTPUT_FILE} && false)
 
         COMMAND
             ${CMAKE_COMMAND} -E touch ${PASSED_FILE}

@@ -1,4 +1,5 @@
 include_guard(__included_ccache)
+include(message)
 
 # if ccache is found on the path, build through it
 
@@ -23,5 +24,8 @@ if (CCACHE_FOUND)
             RULE_LAUNCH_LINK
                 ccache
         )
+else()
+
+    message (INFO "ccache not found - consider installing it for faster incremental builds")
 
 endif()

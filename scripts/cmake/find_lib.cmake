@@ -10,7 +10,7 @@ function(do_find_lib LIB_NAME SUFFIX OUT)
     # PATHS    search paths*
 
     # parse arguments
-    set(options)
+    set(options OPTIONAL)
     set(values)
     set(lists   PATHS)
     cmake_parse_arguments(FIND "${options}" "${values}" "${lists}" "${ARGN}")
@@ -21,14 +21,16 @@ function(do_find_lib LIB_NAME SUFFIX OUT)
         FOUND_${LIB_NAME}${SUFFIX} 
         ${LIB_NAME}
         PATHS
-        ${FIND_PATHS}
-          )
+            ${FIND_PATHS}
+        )
 
-    if(NOT FOUND_${LIB_NAME}${SUFFIX})
+    if(NOT FOUND_${LIB_NAME}${SUFFIX} AND NOT ${FIND_OPTIONAL})
         message(SEND_ERROR "unable to find library ${LIB_NAME}")
     endif()
 
-    set(${OUT} ${FOUND_${LIB_NAME}${SUFFIX}} PARENT_SCOPE)
+    get_filename_component(ABS_FILE ${FOUND_${LIB_NAME}${SUFFIX}} ABSOLUTE)
+
+    set(${OUT} ${ABS_FILE} PARENT_SCOPE)
 
 endfunction()
 
@@ -41,7 +43,7 @@ function(find_static_lib LIB_NAME OUT)
     # PATHS    search paths*
 
     # parse arguments
-    set(options)
+    set(options OPTIONAL)
     set(values)
     set(lists   PATHS)
     cmake_parse_arguments(FIND "${options}" "${values}" "${lists}" "${ARGN}")
@@ -52,12 +54,17 @@ function(find_static_lib LIB_NAME OUT)
         set(SUFFIX ".a")
     endif()      
 
+    if(FIND_OPTIONAL)
+        set(OPTIONAL "OPTIONAL")
+    endif()
+
     do_find_lib(
         ${LIB_NAME} 
         ${SUFFIX} 
         FOUND 
         PATHS
-            ${FIND_PATHS})
+            ${FIND_PATHS}
+        ${OPTIONAL})
 
     set(${OUT} ${FOUND} PARENT_SCOPE)
 
@@ -72,7 +79,7 @@ function(find_shared_lib LIB_NAME OUT)
     # PATHS    search paths*
 
     # parse arguments
-    set(options)
+    set(options OPTIONAL)
     set(values)
     set(lists   PATHS)
     cmake_parse_arguments(FIND "${options}" "${values}" "${lists}" "${ARGN}")
@@ -83,12 +90,17 @@ function(find_shared_lib LIB_NAME OUT)
         set(SUFFIX ".so")
     endif()      
 
+    if(FIND_OPTIONAL)
+        set(OPTIONAL "OPTIONAL")
+    endif()
+
     do_find_lib(
         ${LIB_NAME} 
         ${SUFFIX} 
         FOUND 
         PATHS
-            ${FIND_PATHS})
+            ${FIND_PATHS}
+        ${OPTIONAL})
 
     set(${OUT} ${FOUND} PARENT_SCOPE)
 

@@ -58,9 +58,17 @@ if(DIRTY)
     set(DIRTY .dirty)
 endif()
 
-file(GLOB EXISTING_TAGGED_FILES ${DEST_FILE}.[0-9]*)
+file(GLOB EXISTING_TAGGED_FILES ${DEST_FILE}*.[0-9]*)
 
-set(TAGGED_DEST_FILE ${DEST_FILE}.${COMMITS}${BRANCH}${BUILD}${DIRTY})
+set(TAGGED_DEST_FILE ${DEST_FILE}${BRANCH}.${COMMITS}${BUILD}${DIRTY})
+
+# default install operation is to to create a symlink, as this uses the least amount of disk space
+# - allow users to copy the file, at the expense of additional space
+if(INSTALL_TAGGED_AS_COPY)
+    set(INSTALL_TYPE copy)
+else()
+    set(INSTALL_TYPE create_symlink)
+endif()
 
 # don't reinstall if there is only 1 tagged file there, it's name matches, and it's newer than the source file
 if(NOT EXISTING_TAGGED_FILES STREQUAL TAGGED_DEST_FILE OR ${SRC_FILE} IS_NEWER_THAN ${TAGGED_DEST_FILE})
@@ -79,7 +87,7 @@ if(NOT EXISTING_TAGGED_FILES STREQUAL TAGGED_DEST_FILE OR ${SRC_FILE} IS_NEWER_T
             ${CMAKE_COMMAND} -E make_directory ${INSTALL_DIR}
 
         COMMAND
-            ${CMAKE_COMMAND} -E copy ${SRC_FILE} ${TAGGED_DEST_FILE}
+            ${CMAKE_COMMAND} -E ${INSTALL_TYPE} ${SRC_FILE} ${TAGGED_DEST_FILE}
 
         COMMAND
             ${CMAKE_COMMAND} -E touch ${TAGGED_DEST_FILE} # update the timestamp so subsequent installs aren't repeated unnecessarily

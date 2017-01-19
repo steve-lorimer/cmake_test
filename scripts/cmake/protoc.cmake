@@ -48,6 +48,8 @@ function(protoc SRCS_OUT HDRS_OUT DIRS_OUT)
 
     set(PROTOC_INCLUDE_PATHS -I ${ARG_CWD})
 
+    set(ARG_INCLUDE ${ARG_INCLUDE} ${DEFAULT_PROTO_INCLUDES})
+
     foreach(PATH ${ARG_INCLUDE})
         list(FIND PROTOC_INCLUDE_PATHS ${PATH} exists)
         if(${exists} EQUAL -1)

@@ -1,3 +1,4 @@
 app
 app.[0-9]*
 version.cpp
+app*.[0-9]*
