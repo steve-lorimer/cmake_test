@@ -10,6 +10,7 @@ include(default_build)
 include(dependencies)
 include(version)
 
+include(project)
 include(module)
 include(find_lib)
 include(bin)
