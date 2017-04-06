@@ -56,10 +56,10 @@ build_dir := $(build_root)$(build_stem)
 .PHONY: all $(target) $(build_variants)
 
 all:
-	@$(MAKE) --no-print-directory -C $(build_dir) $(MAKEFLAGS)
+	@$(MAKE) --no-print-directory -C $(build_dir)
 
 $(target):
-	@$(MAKE) --no-print-directory -C $(build_root) $(target) $(MAKEFLAGS)
+	@$(MAKE) --no-print-directory -C $(build_root) $(target)
 
 $(build): $(if $(target),,all)
 	@touch /dev/null # rule which does nothing; suppresses "Nothing to be done for target"

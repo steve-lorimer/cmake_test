@@ -69,7 +69,7 @@ function(test)
     # make tests run through valgrind by default
     if (NOT ARG_NO_VALGRIND)
         set(VALGRIND_BIN  "valgrind")
-        set(VALGRIND_OPTS "--leak-check=full --track-origins=yes --error-exitcode=1 --quiet")
+        set(VALGRIND_OPTS "--leak-check=full --track-origins=yes --error-exitcode=1 --quiet --soname-synonyms=somalloc=tcmalloc")
 
         if (ARG_SUPPRESSIONS)
             set(VALGRIND_OPTS "${VALGRIND_OPTS} --suppressions=${CMAKE_CURRENT_SOURCE_DIR}/${ARG_SUPPRESSIONS}")

@@ -19,63 +19,75 @@ else()
     set(COUNT_LINES wc -l)
 endif()
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
-# git version
-execute_process(
-    OUTPUT_VARIABLE VERSION
-    COMMAND         git describe --always --dirty --long --tags
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+    set(VERSION       "skipped due to debug build")
+    set(NUM_COMMITS   "skipped due to debug build")
+    set(BRANCH        "skipped due to debug build")
+    set(AHEAD_BY      "skipped due to debug build")
+    set(NUM_UNTRACKED "skipped due to debug build")
+    set(USER          "skipped due to debug build")
+    set(HOSTNAME      "skipped due to debug build")
 
-# number of commits
-execute_process(
-    OUTPUT_VARIABLE NUM_COMMITS
-    COMMAND         git rev-list HEAD
-    COMMAND         ${COUNT_LINES}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+else()
 
-# branch
+  # git version
   execute_process(
-    OUTPUT_VARIABLE BRANCH
-    COMMAND         git rev-parse --abbrev-ref HEAD
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+      OUTPUT_VARIABLE VERSION
+      COMMAND         git rev-parse --short HEAD
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
 
-# ahead by
-execute_process(
-    OUTPUT_VARIABLE AHEAD_BY
-    COMMAND         git log --oneline origin/${BRANCH}..${BRANCH}
-    COMMAND         ${COUNT_LINES}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+  # number of commits
+  execute_process(
+      OUTPUT_VARIABLE NUM_COMMITS
+      COMMAND         git rev-list HEAD
+      COMMAND         ${COUNT_LINES}
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
 
-# num untracked
-execute_process(
-    OUTPUT_VARIABLE NUM_UNTRACKED
-    COMMAND         git ls-files --exclude-standard --others --full-name -- .
-    COMMAND         ${COUNT_LINES}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+  # branch
+    execute_process(
+      OUTPUT_VARIABLE BRANCH
+      COMMAND         git rev-parse --abbrev-ref HEAD
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
 
-# user
-execute_process(
-    OUTPUT_VARIABLE USER
-    COMMAND         whoami
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+  # ahead by
+  execute_process(
+      OUTPUT_VARIABLE AHEAD_BY
+      COMMAND         git log --oneline origin/${BRANCH}..${BRANCH}
+      COMMAND         ${COUNT_LINES}
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
 
-# hostname
-execute_process(
-    OUTPUT_VARIABLE HOSTNAME
-    COMMAND         hostname
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
+  # num untracked
+  execute_process(
+      OUTPUT_VARIABLE NUM_UNTRACKED
+      COMMAND         git ls-files --exclude-standard --others --full-name -- .
+      COMMAND         ${COUNT_LINES}
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+
+  # user
+  execute_process(
+      OUTPUT_VARIABLE USER
+      COMMAND         whoami
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+
+  # hostname
+  execute_process(
+      OUTPUT_VARIABLE HOSTNAME
+      COMMAND         hostname
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      )
+endif()
 
 # build variant
 string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_VARIANT)

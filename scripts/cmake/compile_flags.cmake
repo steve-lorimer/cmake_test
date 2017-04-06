@@ -49,7 +49,6 @@ add_flag       (-msse4.2)
 add_flag       (-mfpmath=sse)
 add_flag       (-ftemplate-depth-128)
 add_flag       (-Wno-unused-parameter)
-add_flag       (-Wno-maybe-uninitialized) # maybe-uninitialized is imperfect and reports false positives
 add_flag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
 add_flag       (-pthread)
 add_flag       (-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG) # enable nanosecond resolution
@@ -126,7 +125,6 @@ add_cflag       (-msse2)
 add_cflag       (-msse4.2)
 add_cflag       (-mfpmath=sse)
 add_cflag       (-Wno-unused-parameter)
-add_cflag       (-Wno-maybe-uninitialized) # maybe-uninitialized is imperfect and reports false positives
 add_cflag       (-Wno-strict-aliasing)     # libev breaks strict-aliasing rules
 add_cflag       (-pthread)
 
@@ -153,3 +151,50 @@ add_release_cflag(-fno-builtin-malloc)
 add_release_cflag(-fno-builtin-calloc)
 add_release_cflag(-fno-builtin-realloc)
 add_release_cflag(-fno-builtin-free)
+
+##########################################################################
+# compiler-specific flags
+##########################################################################
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+
+    # this is not enabled in clang by default
+    add_flag(-fsized-deallocation)
+
+    # TODO: fix these please
+    add_flag(-Wno-unused-function)
+    add_flag(-Wno-unused-const-variable)
+    add_flag(-Wno-unused-private-field)
+    add_flag(-Wno-mismatched-tags)
+    add_flag(-Wno-missing-braces)
+    add_flag(-Wno-sometimes-uninitialized)
+    add_flag(-Wno-return-stack-address)
+    add_flag(-Wno-overloaded-virtual)
+
+    add_cflag(-Wno-unused-function)
+    add_cflag(-Wno-unused-const-variable)
+    add_cflag(-Wno-unused-private-field)
+    add_cflag(-Wno-mismatched-tags)
+    add_cflag(-Wno-missing-braces)
+    add_cflag(-Wno-sometimes-uninitialized)
+    add_cflag(-Wno-return-stack-address)
+    add_cflag(-Wno-overloaded-virtual)
+
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+ 
+    # gcc doesn't do well with boost::optional
+    add_flag(-Wno-maybe-uninitialized)
+    add_cflag(-Wno-maybe-uninitialized)
+    if (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 6.3)
+        add_flag(-Wno-misleading-indentation)
+        add_flag(-Wduplicated-cond)
+        add_cflag(-Wno-misleading-indentation)
+        add_cflag(-Wduplicated-cond)
+    endif()
+
+    # this is a gnu extension - used in boost float128...
+    add_flag(-fext-numeric-literals)
+    
+ 
+endif()
+

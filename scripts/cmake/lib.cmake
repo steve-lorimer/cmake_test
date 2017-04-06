@@ -87,53 +87,13 @@ function(lib)
         ${ARG_SRCS} ${PROTO_SRCS} ${PROTO_HDRS} ${ARG_MOC_OUT} ${ARG_RES_OUT} ${ARG_UI_OUT}
         )
 
-    # Work around CMP0003: Libraries linked via full path no longer produce linker search paths
-    # Don't link with absolute paths, just link using the library name, and add the path to the library
-    #  search path
-    set(LIB_FILES)
-    set(LIB_DIRS)
-    foreach(LIB ${ARG_LIBS})
-        get_filename_component(FILE ${LIB} NAME)
-        get_filename_component(DIR  ${LIB} DIRECTORY)
-
-        # if this is an internal target, add the implicit .lib suffix
-        if (TARGET ${FILE}.lib)
-            add_unique(${FILE}.lib LIB_FILES)
-        else()
-            add_unique(${FILE} LIB_FILES)
-        endif()
-
-        if(DIR)
-            add_unique(${DIR} LIB_DIRS)
-        endif()
-    endforeach()
-
-    # Add any paths found in our libraries to the linker search path
-    foreach(DIR ${LIB_DIRS})
-        target_link_libraries(${LIB_NAME} -L${DIR})
-    endforeach()
+    if (ARG_LIBS)
+        clean_link_libs(ARG_LIBS_OUT "${ARG_LIBS}")
+        target_link_libraries(${LIB_NAME} ${ARG_LIBS_OUT})
+    endif()
 
     target_link_libraries(${LIB_NAME}
-        ${LIB_FILES}
         ${PROTO_LIB})
-
-    # Add include paths for generated files so relative includes work
-    # this is such a mess - there must be a better way to do this, but so far I haven't found one
-    set(DIR_LIST)
-    foreach(FILE ${ARG_SRCS})
-        get_filename_component(ABS_FILE ${FILE}     ABSOLUTE)
-        get_filename_component(DIR      ${ABS_FILE} DIRECTORY)
-        add_unique(${DIR} DIR_LIST)
-    endforeach()
-    foreach(DIR ${PROTO_DIRS})
-        add_unique(${DIR} DIR_LIST)
-    endforeach()
-
-    # current source directory is always implicitly searched for local includes, and if explicitly added
-    #  it can hide system file
-    list(REMOVE_ITEM DIR_LIST ${CMAKE_CURRENT_SOURCE_DIR})
-
-    target_include_directories(${LIB_NAME} PRIVATE ${DIR_LIST})
 
     # remove the .so suffix we added to the target name from the generated library
     if(ARG_SHARED AND NOT WIN32)
