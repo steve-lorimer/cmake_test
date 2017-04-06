@@ -9,6 +9,7 @@ include(compile_flags)
 include(default_build)
 include(dependencies)
 include(version)
+include(build_config)
 
 include(project)
 include(module)

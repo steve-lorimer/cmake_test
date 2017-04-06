@@ -131,4 +131,5 @@ function(bin)
 
     install_makefile()
 
+    add_dependencies(${BIN_NAME} build_config)
 endfunction()

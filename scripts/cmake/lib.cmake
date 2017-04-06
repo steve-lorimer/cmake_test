@@ -116,5 +116,6 @@ function(lib)
 
     install_makefile()
 
+    add_dependencies(${LIB_NAME} build_config)
 endfunction()
 
