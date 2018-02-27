@@ -1,7 +1,6 @@
 # Cmake Project
 
-This is a small project I used to learn cmake while migrating an existing build system
-from [boost build](http://www.boost.org/build/) to [cmake](https://cmake.org/)
+This is a small project I used to learn cmake while migrating an existing build system to [cmake](https://cmake.org/)
 
 ## Structure
 
@@ -25,32 +24,23 @@ from [boost build](http://www.boost.org/build/) to [cmake](https://cmake.org/)
 
     `mkdir build && cd build && cmake .. && make`
 
-- [boost build](http://www.boost.org/build/)
-
-    `b2`
-
 ## Features
 
 ### version information
 
-Version information is generated and injected into the build
-
-**Files:**
-
-- `scripts/version.sh`: script which generates the version information
-- `scripts/cmake/version.cmake`: cmake function which calls the script
-- `Jamroot`: the version script is called directly from the Jamroot when building with boost-build
+Version information is generated and a version.cc file generated.
 
 The output of printing this information is similar to this:
 
-    source version: bd0c2d4
-    num commits:    27
-    branch:         master
-    build variant:  debug
-    build date:     Apr 19 2016 16:49:57
-    ahead by:       1
-    user:           steve
-    hostname:       ky-steve
+    build variant : release
+    build date    : Feb 27 2018 10:56:11
+    version       : 083b581
+    num_commits   : 78
+    branch        : master
+    ahead_by      : 0
+    num_untracked : 0
+    user          : steve
+    hostname      : ky-steve
 
 ### Tests
 
@@ -65,7 +55,6 @@ A memory leak breaks the build
 **Files:**
 
 - `scripts/cmake/test.cmake`: cmake function which adds the test and configures it to run as part of the build
-- `foo/test/Jamfile`: boost-build provides this functionality built-in via the `run` rule and `<testing-launcher>`
 
 ### Tagged binaries:
 
@@ -80,7 +69,6 @@ Version information tagged onto a binary:
 
 **Files:**
 
-- `scripts/tag.sh`: script with generates the version information
 - `scripts/cmake/install.cmake`: cmake function which installs the binary, and tags it with version information (wip)
 
 ### Modules
@@ -91,10 +79,6 @@ eg: `foo` module contains `libfoo` static library and `foo_test`, tests which ve
 
 `foo` exists as a target in the makefiles. `make foo` builds all related targets.
 
-**Files:**
-
-- `scripts/module.sh`: script with creates the module target and adds a related target as a dependency
-
 ## Build settings
 
 Top level `CMakeLists.txt` includes `all.cmake`, which pulls in all the custom cmake scripts.
@@ -104,4 +88,25 @@ Additionally, `all.cmake` pulls in several scripts which configure the build
 - `scripts/cmake/ccache.cmake`: builds through `ccache` if it is found
 - `scripts/cmake/default_build.cmake`: sets the default build to `Debug` if it hasn't been specified
 - `scripts/cmake/compile_flags.cmake`: compiler flags set for the build
-- `scripts/cmake/dependencies.cmake`: pulls in 3rd part dependencies
+- `scripts/cmake/dependencies.cmake`: pulls in 3rd party dependencies
+
+## Quickstart
+
+There is a script `bootstrap` in the root directory which will set up the cmake files automatically.
+
+The bootstrap script will install 2 sets of makefiles, for debug and release builds.
+
+These are installed to `cmake_test/.build/debug` and `cmake_test/.build/release` respectively.
+
+The bootstrap script will also install makefiles into the source tree, allowing you to build from within the source tree. These makefiles delegate the build to the appropriate out-of-source makefiles.
+
+These in-source makefiles allow you to build either debug or release (debug is default), and to optionally list a target to build (default is all targets at-or-below the current location in the source tree)
+
+Examples
+
+    $ make              # builds all targets at-or-below the current location in the source tree in debug mode
+    $ make release      # builds all targets at-or-below the current location in the source tree in release mode
+    $ make foo          # builds the foo target in debug mode
+    $ make foo release  # builds the foo target in release mode
+    
+    

@@ -1,4 +1,0 @@
-use-project /ext/eastl : eastl ;
-
-build-project eastl ;
-

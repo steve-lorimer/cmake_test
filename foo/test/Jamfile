@@ -1,9 +1,0 @@
-import testing ;
-
-run
-    [ glob *.cpp ]
-    /proj/foo//foo
-: : : <testing.launcher>"valgrind --leak-check=full --track-origins=yes --error-exitcode=1 --quiet"
-      <testing.arg>" --report_level=detailed"
-: foo-tests
-;
